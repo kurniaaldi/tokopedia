@@ -2,6 +2,7 @@ import { CardAnime } from "components/molecules";
 import React from "react";
 import "./App.css";
 import styled from "@emotion/styled";
+import { Input, Pagination } from "components/atoms";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -40,22 +41,13 @@ function App() {
   return (
     <Container>
       <WrapperMain>
-        <div
-          className="input-wrapper"
-          style={{ width: "100%", height: "100%", display: "flex" }}
-        >
-          <input
-            placeholder="Search.."
-            name="search"
-            style={{ width: "100%" }}
-          />
-          <button type="submit">search</button>
-        </div>
+        <Input />
         <WrapperCard>
           {Array.from(arr || []).map((item: any) => {
             return <CardAnime key={item} />;
           })}
         </WrapperCard>
+        <Pagination />
       </WrapperMain>
     </Container>
   );
