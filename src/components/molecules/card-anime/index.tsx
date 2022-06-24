@@ -2,12 +2,12 @@ import { BOOKMARK } from "assets";
 import { Card } from "components/atoms";
 import React from "react";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 
 const WrapperRoot = styled.div({
   width: "100%",
   height: "100%",
   position: "relative",
+  minHeight: "16.5rem",
 });
 
 const Image = styled.img({
@@ -37,11 +37,16 @@ const Icon = styled.div({
   },
 });
 
-const CardAnime = () => {
+interface IPropsCardAnime {
+  addCollection: () => void;
+}
+
+const CardAnime = (props: IPropsCardAnime) => {
+  const { addCollection } = props;
   return (
     <Card>
       <WrapperRoot>
-        <Icon onClick={() => alert("book")}>
+        <Icon onClick={addCollection}>
           <BOOKMARK />
         </Icon>
         <Image
@@ -58,7 +63,7 @@ const CardAnime = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "linear-gradient(transparent, rgba(0,0,0,90%))",
+            background: "linear-gradient(to bottom,#00000000,#111)",
           }}
         >
           <h4

@@ -6,7 +6,6 @@ const CardRoot = styled.div({
   background: "lightblue",
   borderRadius: 8,
   position: "relative",
-  height: "16.5rem",
   overflow: "hidden",
 });
 
