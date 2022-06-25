@@ -1,18 +1,24 @@
 import React from "react";
 
-const Pagination = () => {
+interface IPropsPagination {
+  next: (page: number) => void;
+  currentPage: number;
+  previous: (page: number) => void;
+  hasNextPage: boolean;
+  total?: number;
+}
+
+const Pagination = (props: IPropsPagination) => {
+  const { next, previous, hasNextPage, currentPage } = props;
+
   return (
     <div className="pagination">
-      <a href="#">&laquo;</a>
-      <a href="#">1</a>
-      <a href="#" className="active">
-        2
-      </a>
-      <a href="#">3</a>
-      <a href="#">4</a>
-      <a href="#">5</a>
-      <a href="#">6</a>
-      <a href="#">&raquo;</a>
+      {currentPage > 1 && (
+        <li onClick={() => previous(currentPage)}>&laquo;</li>
+      )}
+      <li className="active">{currentPage}</li>
+
+      {hasNextPage && <li onClick={() => next(currentPage)}>&raquo;</li>}
     </div>
   );
 };

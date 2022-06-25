@@ -54,7 +54,10 @@ const CardAnime = (props: IPropsCardAnime) => {
           <BOOKMARK />
         </Icon>
         <Link to={`/anime/${data?.id}`}>
-          <Image src={data?.coverImage?.large} alt={data?.title?.english} />
+          <Image
+            src={data?.coverImage?.["large" || "medium"]}
+            alt={data?.title?.english}
+          />
 
           <div
             style={{

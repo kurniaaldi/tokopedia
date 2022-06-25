@@ -19,13 +19,14 @@ export const GET_ANIME_LIST = gql`
         }
         coverImage {
           large
+          medium
         }
       }
     }
   }
 `;
 
-const GET_DETAIL_ANIME = gql`
+export const GET_DETAIL_ANIME = gql`
   query ($id: Int) {
     Media(id: $id) {
       id

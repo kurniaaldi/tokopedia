@@ -63,20 +63,21 @@ code {
   display: inline-block;
 }
 
-.pagination a {
-  color: black;
+.pagination li {
+  color: #f1f1f1;
   float: left;
   padding: 8px 16px;
   text-decoration: none;
+  list-style: none;
 }
 
-.pagination a.active {
+.pagination li.active {
   background-color: #4caf50;
   color: white;
   border-radius: 5px;
 }
 
-.pagination a:hover:not(.active) {
-  background-color: #ddd;
+.pagination li:hover:not(.active) {
+  /* background-color: #ddd; */
   border-radius: 5px;
 }
