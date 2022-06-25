@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 
 const CardRoot = styled.div({
   width: "100%",
-  background: "lightblue",
   borderRadius: 8,
   position: "relative",
   overflow: "hidden",

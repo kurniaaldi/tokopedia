@@ -2,12 +2,14 @@ import { BOOKMARK } from "assets";
 import { Card } from "components/atoms";
 import React from "react";
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 
 const WrapperRoot = styled.div({
   width: "100%",
   height: "100%",
   position: "relative",
   minHeight: "16.5rem",
+  background: "transparent",
 });
 
 const Image = styled.img({
@@ -49,33 +51,32 @@ const CardAnime = (props: IPropsCardAnime) => {
         <Icon onClick={addCollection}>
           <BOOKMARK />
         </Icon>
-        <Image
-          onClick={() => alert("img")}
-          src="./dummy1.png"
-          alt="dummy.png"
-        />
+        <Link to={"/anime/123"}>
+          <Image src="./dummy1.png" alt="dummy.png" />
 
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "linear-gradient(to bottom,#00000000,#111)",
-          }}
-        >
-          <h4
+          <div
             style={{
-              color: "#fff",
-              textShadow:
-                "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              background: "linear-gradient(to bottom,#00000000,#111)",
+              minHeight: "10rem",
             }}
           >
-            Title
-          </h4>
-        </div>
+            <h4
+              style={{
+                color: "#fff",
+                textShadow:
+                  "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
+              }}
+            >
+              Title
+            </h4>
+          </div>
+        </Link>
       </WrapperRoot>
     </Card>
   );

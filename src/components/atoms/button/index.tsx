@@ -9,10 +9,13 @@ const StyledButton = styled.button(
     padding: "10px",
     textAlign: "center",
     textDecoration: "none",
-    display: "inline-block",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     fontSize: "16px",
     cursor: "pointer",
     borderRadius: 8,
+    gap: "0.5rem",
   },
   (props: any) => ({ width: props.width })
 );
@@ -20,11 +23,19 @@ const StyledButton = styled.button(
 interface IPropsButton {
   children: ReactNode;
   fullWidth?: boolean;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
 }
 
 const Button = (props: IPropsButton) => {
-  const { children, fullWidth = false } = props;
-  return <StyledButton width={fullWidth && "100%"}>{children}</StyledButton>;
+  const { children, fullWidth = false, suffix, prefix } = props;
+  return (
+    <StyledButton width={fullWidth && "100%"}>
+      {prefix}
+      {children}
+      {suffix}
+    </StyledButton>
+  );
 };
 
 export default Button;
