@@ -13,10 +13,20 @@ interface IPropsInput {
   placeholder?: string;
   name?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onClickButton?: () => void;
+  titleButton?: string;
 }
 
 const Input = (props: IPropsInput) => {
-  const { value, defaultValue, placeholder, onChange, name } = props;
+  const {
+    value,
+    defaultValue,
+    placeholder,
+    onChange,
+    name,
+    onClickButton,
+    titleButton,
+  } = props;
   return (
     <WrapperInput className="input-wrapper">
       <input
@@ -27,7 +37,11 @@ const Input = (props: IPropsInput) => {
         name={name}
         style={{ width: "100%" }}
       />
-      <button type="submit">search</button>
+      {onClickButton && (
+        <button onClick={onClickButton} type="submit">
+          {titleButton || ""}
+        </button>
+      )}
     </WrapperInput>
   );
 };

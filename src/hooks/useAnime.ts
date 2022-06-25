@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 
 export const GET_ANIME_LIST = gql`
-  query ($id: Int, $page: Int, $perPage: Int) {
+  query ($id: Int, $page: Int, $perPage: Int, $search: String) {
     Page(page: $page, perPage: $perPage) {
       pageInfo {
         total
@@ -11,7 +11,7 @@ export const GET_ANIME_LIST = gql`
         hasNextPage
         perPage
       }
-      media(id: $id) {
+      media(id: $id, search: $search) {
         id
         title {
           romaji

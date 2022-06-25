@@ -91,18 +91,38 @@ const Home = () => {
 
   const handleNextPage = (value: number) => {
     loadAnimeList({
+      fetchPolicy: "network-only",
       variables: {
         page: value + 1,
         perPage: 10,
+        search: valueSearch,
       },
     });
   };
 
   const handlePreviousPage = (value: number) => {
     loadAnimeList({
+      fetchPolicy: "network-only",
       variables: {
         page: value - 1,
         perPage: 10,
+        search: valueSearch,
+      },
+    });
+    console.log({
+      page: value - 1,
+      perPage: 10,
+      search: valueSearch,
+    });
+  };
+
+  const handleSearchAnime = () => {
+    loadAnimeList({
+      fetchPolicy: "network-only",
+      variables: {
+        page: 1,
+        perPage: 10,
+        search: valueSearch,
       },
     });
   };
@@ -117,6 +137,8 @@ const Home = () => {
           placeholder="Search..."
           value={valueSearch}
           onChange={(e) => setValueSearch(e.currentTarget.value)}
+          titleButton="Search"
+          onClickButton={() => handleSearchAnime()}
         />
         <WrapperCard>
           {listAnime.map((item: any) => {

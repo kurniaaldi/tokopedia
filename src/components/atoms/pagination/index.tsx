@@ -14,11 +14,17 @@ const Pagination = (props: IPropsPagination) => {
   return (
     <div className="pagination">
       {currentPage > 1 && (
-        <li onClick={() => previous(currentPage)}>&laquo;</li>
+        <li style={{ cursor: "pointer" }} onClick={() => previous(currentPage)}>
+          &laquo;
+        </li>
       )}
       <li className="active">{currentPage}</li>
 
-      {hasNextPage && <li onClick={() => next(currentPage)}>&raquo;</li>}
+      {hasNextPage && (
+        <li style={{ cursor: "pointer" }} onClick={() => next(currentPage)}>
+          &raquo;
+        </li>
+      )}
     </div>
   );
 };

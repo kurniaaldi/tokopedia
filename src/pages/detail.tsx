@@ -91,7 +91,7 @@ const Detail = () => {
 
   return (
     <WrapperMain>
-      <WrapperBox backgroundImage={`url(${data?.Media?.bannerImage})`}>
+      <WrapperBox>
         <img
           src={data?.Media?.coverImage.large}
           alt={data?.Media?.title.english}
@@ -102,6 +102,17 @@ const Detail = () => {
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
             marginBottom: 100,
+            zIndex: 3,
+          }}
+        />
+        <div
+          style={{
+            backgroundImage: `url(${data?.Media?.bannerImage})`,
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+            filter: "blur(2px)",
           }}
         />
         <div
@@ -116,6 +127,7 @@ const Detail = () => {
             minHeight: "20rem",
             flexDirection: "column",
             gap: "1rem",
+            zIndex: 2,
           }}
         >
           <H4
