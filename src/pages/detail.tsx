@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Button } from "components/atoms";
 import { BOOKMARK } from "assets";
+import { useParams } from "react-router-dom";
+import useAnime from "hooks/useAnime";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -74,52 +76,28 @@ const BoxSpesifikasi = styled.div({
 });
 
 const Detail = () => {
-  const dummy = {
-    id: 1,
-    title: {
-      romaji: "Cowboy Bebop",
-      english: "Cowboy Bebop",
-      native: "カウボーイビバップ",
+  const { id } = useParams();
+  console.log(id);
+
+  const { getDetailAnimeList } = useAnime({
+    detail: {
+      skip: !id,
+      variables: {
+        id: id,
+      },
     },
-    source: "ORIGINAL",
-    format: "TV",
-    averageScore: 86,
-    type: "ANIME",
-    status: "FINISHED",
-    description:
-      "Enter a world in the distant future, where Bounty Hunters roam the solar system. Spike and Jet, bounty hunting partners, set out on journeys in an ever struggling effort to win bounty rewards to survive.<br><br>\nWhile traveling, they meet up with other very interesting people. Could Faye, the beautiful and ridiculously poor gambler, Edward, the computer genius, and Ein, the engineered dog be a good addition to the group?",
-    episodes: 26,
-    idMal: 1,
-    season: "SPRING",
-    genres: ["Action", "Adventure", "Drama", "Sci-Fi"],
-    coverImage: {
-      extraLarge:
-        "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-CXtrrkMpJ8Zq.png",
-      large:
-        "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1-CXtrrkMpJ8Zq.png",
-      medium:
-        "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx1-CXtrrkMpJ8Zq.png",
-      color: "#f1785d",
-    },
-    bannerImage:
-      "https://s4.anilist.co/file/anilistcdn/media/anime/banner/5-VOcSZFepDDhm.jpg",
-    studios: {
-      nodes: [
-        {
-          name: "Sunrise",
-          id: 14,
-          isAnimationStudio: true,
-        },
-      ],
-    },
-  };
+  });
+
+  console.log(getDetailAnimeList);
+
+  const { data } = getDetailAnimeList;
 
   return (
     <WrapperMain>
-      <WrapperBox backgroundImage={`url(${dummy.bannerImage})`}>
+      <WrapperBox backgroundImage={`url(${data?.Media?.bannerImage})`}>
         <img
-          src={dummy.coverImage.large}
-          alt="dummy.png"
+          src={data?.Media?.coverImage.large}
+          alt={data?.Media?.title.english}
           style={{
             width: "10rem",
             height: "15rem",
@@ -151,7 +129,7 @@ const Detail = () => {
                 "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
             }}
           >
-            {dummy.title.english}
+            {data?.Media?.title.english || data?.Media?.title.romaji}
           </H4>
           <H4
             style={{
@@ -178,41 +156,43 @@ const Detail = () => {
       <WrapperBox>
         <BoxSpesifikasi>
           <Title>Alternatif Judul:</Title>
-          <Subtitle>{dummy.title.english}</Subtitle>
-          <Subtitle>{dummy.title.native}</Subtitle>
+          <Subtitle>{data?.Media?.title.english}</Subtitle>
+          <Subtitle>{data?.Media?.title.native}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Status:</Title>
-          <Subtitle>{dummy.status}</Subtitle>
+          <Subtitle>{data?.Media?.status}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Episode:</Title>
-          <Subtitle color="#007aff">{dummy.episodes}</Subtitle>
+          <Subtitle color="#007aff">{data?.Media?.episodes}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Jenis:</Title>
-          <Subtitle color="#007aff">{dummy.format}</Subtitle>
+          <Subtitle color="#007aff">{data?.Media?.format}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Season:</Title>
-          <Subtitle color="#007aff">{dummy.season}</Subtitle>
+          <Subtitle color="#007aff">{data?.Media?.season}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>studios:</Title>
-          <Subtitle color="#007aff">{dummy.studios.nodes?.[0].name}</Subtitle>
+          <Subtitle color="#007aff">
+            {data?.Media?.studios.nodes?.[0].name}
+          </Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Genres:</Title>
           <Subtitle color="#007aff">
-            {Array.from(dummy.genres || []).join()}
+            {Array.from(data?.Media?.genres || []).join()}
           </Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Description:</Title>
-          {/* <Subtitle textAlign="left">{dummy.description}</Subtitle> */}
+          {/* <Subtitle textAlign="left">{data?.Media?.description}</Subtitle> */}
           <div
             style={{ color: "#ccc", textAlign: "left" }}
-            dangerouslySetInnerHTML={{ __html: dummy.description }}
+            dangerouslySetInnerHTML={{ __html: data?.Media?.description }}
           />
         </BoxSpesifikasi>
       </WrapperBox>

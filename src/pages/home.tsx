@@ -1,7 +1,8 @@
 import { CardAnime, SlideCollection } from "components/molecules";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import { Input, Pagination } from "components/atoms";
+import useAnime from "hooks/useAnime";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -27,9 +28,18 @@ const WrapperCard = styled.section({
   },
 });
 
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const Home = () => {
   const [storeCollection, setStoreCollection] = useState<any[]>([]);
+  const { getAnimeList } = useAnime({
+    getData: {
+      variables: {
+        page: 1,
+        perPage: 10,
+      },
+    },
+  });
+
+  const { data } = getAnimeList;
 
   const handleAddCollection = (value: any) => {
     setStoreCollection((prev: any) => [...prev, value]);
@@ -46,11 +56,12 @@ const Home = () => {
       <WrapperMain>
         <Input />
         <WrapperCard>
-          {Array.from(arr || []).map((item: any) => {
+          {Array.from(data?.Page?.media || []).map((item: any) => {
             return (
               <CardAnime
+                data={item}
                 addCollection={() => handleAddCollection(item)}
-                key={item}
+                key={item?.id}
               />
             );
           })}

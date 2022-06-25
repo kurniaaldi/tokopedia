@@ -41,18 +41,20 @@ const Icon = styled.div({
 
 interface IPropsCardAnime {
   addCollection: () => void;
+  data: any;
 }
 
 const CardAnime = (props: IPropsCardAnime) => {
-  const { addCollection } = props;
+  const { addCollection, data } = props;
+
   return (
     <Card>
       <WrapperRoot>
         <Icon onClick={addCollection}>
           <BOOKMARK />
         </Icon>
-        <Link to={"/anime/123"}>
-          <Image src="./dummy1.png" alt="dummy.png" />
+        <Link to={`/anime/${data?.id}`}>
+          <Image src={data?.coverImage?.large} alt={data?.title?.english} />
 
           <div
             style={{
@@ -73,7 +75,7 @@ const CardAnime = (props: IPropsCardAnime) => {
                   "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
               }}
             >
-              Title
+              {data?.title?.english || data?.title?.romaji}
             </h4>
           </div>
         </Link>
