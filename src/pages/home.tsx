@@ -87,6 +87,8 @@ const Home = () => {
     ]);
   };
 
+  // console.log(storeCollection.map((item: any) => item.id));
+
   const handleNextPage = (value: number) => {
     loadAnimeList({
       variables: {
@@ -105,6 +107,8 @@ const Home = () => {
     });
   };
 
+  const isAdded = storeCollection.map((item: any) => item.id);
+
   return (
     <>
       <WrapperMain>
@@ -121,6 +125,7 @@ const Home = () => {
                 data={item}
                 addCollection={() => handleAddCollection(item)}
                 key={item?.id}
+                isAdded={isAdded.includes(item.id)}
               />
             );
           })}

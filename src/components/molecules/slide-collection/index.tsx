@@ -62,11 +62,11 @@ const SlideCollection = (props: IPropsSlideCollection) => {
               <WrapCardCollection>
                 <Image
                   onClick={() => alert("img")}
-                  src="./dummy1.png"
-                  alt="dummy.png"
+                  src={item?.coverImage?.["large" || "medium"]}
+                  alt={item?.title?.english || item?.title?.romaji}
                 />
                 <ShadowCollection />
-                <div>
+                <div style={{ paddingRight: 25 }}>
                   <p
                     style={{
                       color: "#fff",
@@ -74,7 +74,7 @@ const SlideCollection = (props: IPropsSlideCollection) => {
                         "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
                     }}
                   >
-                    Title
+                    {item?.title?.english || item?.title?.romaji}
                   </p>
                 </div>
                 <Icon onClick={() => remove(item)}>

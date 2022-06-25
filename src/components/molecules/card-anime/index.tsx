@@ -35,28 +35,34 @@ const Icon = styled.div({
   zIndex: 10,
   "&:hover": {
     cursor: "pointer",
-    background: "rgba(255,255,255,50%)",
+  },
+  "@media only screen and (min-width: 420px)": {
+    "&:hover": {
+      cursor: "pointer",
+      background: "rgba(255,255,255,50%)",
+    },
   },
 });
 
 interface IPropsCardAnime {
   addCollection: () => void;
   data: any;
+  isAdded: boolean;
 }
 
 const CardAnime = (props: IPropsCardAnime) => {
-  const { addCollection, data } = props;
+  const { addCollection, data, isAdded } = props;
 
   return (
     <Card>
       <WrapperRoot>
         <Icon onClick={addCollection}>
-          <BOOKMARK />
+          <BOOKMARK color={isAdded && "#FF7D75"} />
         </Icon>
         <Link to={`/anime/${data?.id}`}>
           <Image
             src={data?.coverImage?.["large" || "medium"]}
-            alt={data?.title?.english}
+            alt={data?.title?.english || data?.title?.romaji}
           />
 
           <div
