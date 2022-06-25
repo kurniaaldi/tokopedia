@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import Home from "pages/home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Detail from "pages/detail";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "libs/apolloClient";
 
 const Container = styled.div({
   textAlign: "center",
@@ -13,17 +15,21 @@ const Container = styled.div({
 });
 
 const App = () => {
+  const client = useApollo();
+
   return (
-    <Router>
-      <Container>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-        <Routes>
-          <Route path="/anime/:id" element={<Detail />} />
-        </Routes>
-      </Container>
-    </Router>
+    <ApolloProvider client={client}>
+      <Router>
+        <Container>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+          <Routes>
+            <Route path="/anime/:id" element={<Detail />} />
+          </Routes>
+        </Container>
+      </Router>
+    </ApolloProvider>
   );
 };
 
