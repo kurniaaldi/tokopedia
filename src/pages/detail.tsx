@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "components/atoms";
-import { BOOKMARK } from "assets";
+import { BOOKMARK, STAR } from "assets";
 import { useParams } from "react-router-dom";
 import useAnime from "hooks/useAnime";
 
@@ -77,7 +77,6 @@ const BoxSpesifikasi = styled.div({
 
 const Detail = () => {
   const { id } = useParams();
-  console.log(id);
 
   const { getDetailAnimeList } = useAnime({
     detail: {
@@ -87,8 +86,6 @@ const Detail = () => {
       },
     },
   });
-
-  console.log(getDetailAnimeList);
 
   const { data } = getDetailAnimeList;
 
@@ -135,11 +132,13 @@ const Detail = () => {
             style={{
               margin: 0,
               color: "#fff",
-              textShadow:
-                "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
+              textShadow: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
             }}
           >
-            82
+            <STAR color="#FFC833" /> 82
           </H4>
           <div
             style={{
