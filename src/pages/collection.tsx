@@ -1,6 +1,7 @@
 import { CardList } from "components/molecules";
 import styled from "@emotion/styled";
 import { useCollection } from "store/collection";
+import { useNavigate } from "react-router-dom";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -20,6 +21,8 @@ const Collections = () => {
   const {
     state: { collections },
   }: any = useCollection();
+
+  const navigate = useNavigate();
 
   return (
     <WrapperMain>
@@ -48,6 +51,7 @@ const Collections = () => {
               }}
             >
               <h4
+                onClick={() => navigate(`/collection/${item.id}`)}
                 style={{
                   margin: 0,
                   color: "#007aff",
@@ -62,7 +66,7 @@ const Collections = () => {
                   <CardList
                     key={child.id}
                     item={child}
-                    onClick={() => console.log("asd")}
+                    onClick={() => navigate(`/anime/${child.id}`)}
                   />
                 );
               })}
