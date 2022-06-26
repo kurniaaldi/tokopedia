@@ -6,6 +6,7 @@ import Detail from "pages/detail";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "libs/apolloClient";
 import "rc-collapse/assets/index.css";
+import Collections from "pages/collection";
 
 const Container = styled.div({
   textAlign: "center",
@@ -27,6 +28,9 @@ const App = () => {
           </Routes>
           <Routes>
             <Route path="/anime/:id" element={<Detail />} />
+          </Routes>
+          <Routes>
+            <Route path="collections" element={<Collections />} />
           </Routes>
         </Container>
       </Router>

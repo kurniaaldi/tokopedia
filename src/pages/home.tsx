@@ -5,6 +5,7 @@ import { Input, Modal, Pagination } from "components/atoms";
 import useAnime, { GET_ANIME_LIST } from "hooks/useAnime";
 import { useLazyQuery } from "@apollo/client";
 import Collapse from "rc-collapse";
+import { Link } from "react-router-dom";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -214,6 +215,19 @@ const Home = () => {
           titleButton="Search"
           onClickButton={() => handleSearchAnime()}
         />
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Link style={{ textDecoration: "none" }} to="/collections">
+            <h4 style={{ margin: 0, color: "#007aff" }}>Collections</h4>
+          </Link>
+        </div>
         <WrapperCard>
           {listAnime.map((item: any) => {
             return (
