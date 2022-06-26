@@ -25,12 +25,13 @@ interface IPropsButton {
   fullWidth?: boolean;
   prefix?: ReactNode;
   suffix?: ReactNode;
+  onClick?: any;
 }
 
 const Button = (props: IPropsButton) => {
-  const { children, fullWidth = false, suffix, prefix } = props;
+  const { children, fullWidth = false, suffix, prefix, onClick } = props;
   return (
-    <StyledButton width={fullWidth && "100%"}>
+    <StyledButton onClick={onClick} width={fullWidth && "100%"}>
       {prefix}
       {children}
       {suffix}

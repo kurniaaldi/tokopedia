@@ -1,7 +1,7 @@
 import { CardAnime, SlideCollection } from "components/molecules";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { Input, Pagination } from "components/atoms";
+import { Input, Modal, Pagination } from "components/atoms";
 import useAnime, { GET_ANIME_LIST } from "hooks/useAnime";
 import { useLazyQuery } from "@apollo/client";
 
@@ -41,6 +41,7 @@ const Home = () => {
   const [valueSearch, setValueSearch] = useState<string>();
   const [storeCollection, setStoreCollection] = useState<any[]>([]);
   const [listAnime, setListAnime] = useState<any[]>([]);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     currentPage: 1,
     hasNextPage: true,
@@ -109,11 +110,6 @@ const Home = () => {
         search: valueSearch,
       },
     });
-    console.log({
-      page: value - 1,
-      perPage: 10,
-      search: valueSearch,
-    });
   };
 
   const handleSearchAnime = () => {
@@ -145,7 +141,7 @@ const Home = () => {
             return (
               <CardAnime
                 data={item}
-                addCollection={() => handleAddCollection(item)}
+                addCollection={() => setOpenModal(true)}
                 key={item?.id}
                 isAdded={isAdded.includes(item.id)}
               />
@@ -159,6 +155,13 @@ const Home = () => {
           previous={(page) => handlePreviousPage(page)}
           total={pageInfo?.total}
         />
+        <Modal
+          title="Add Collection"
+          open={openModal}
+          handleClose={() => setOpenModal(false)}
+        >
+          asd
+        </Modal>
       </WrapperMain>
       {storeCollection.length && (
         <SlideCollection
