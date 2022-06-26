@@ -7,6 +7,7 @@ import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "libs/apolloClient";
 import "rc-collapse/assets/index.css";
 import Collections from "pages/collection";
+import { CollectionsProvider } from "store/collection";
 
 const Container = styled.div({
   textAlign: "center",
@@ -21,19 +22,21 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Router>
-        <Container>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-          <Routes>
-            <Route path="/anime/:id" element={<Detail />} />
-          </Routes>
-          <Routes>
-            <Route path="collections" element={<Collections />} />
-          </Routes>
-        </Container>
-      </Router>
+      <CollectionsProvider>
+        <Router>
+          <Container>
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
+            <Routes>
+              <Route path="/anime/:id" element={<Detail />} />
+            </Routes>
+            <Routes>
+              <Route path="collections" element={<Collections />} />
+            </Routes>
+          </Container>
+        </Router>
+      </CollectionsProvider>
     </ApolloProvider>
   );
 };

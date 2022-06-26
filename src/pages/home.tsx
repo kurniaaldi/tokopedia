@@ -6,6 +6,7 @@ import useAnime, { GET_ANIME_LIST } from "hooks/useAnime";
 import { useLazyQuery } from "@apollo/client";
 import Collapse from "rc-collapse";
 import { Link } from "react-router-dom";
+import { useCollection } from "store/collection";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -40,6 +41,11 @@ interface PageInfo {
 }
 
 const Home = () => {
+  const {
+    state: { collections },
+    addCollection,
+  }: any = useCollection();
+
   const [valueSearch, setValueSearch] = useState<string>();
   const [valueCollection, setValueCollection] = useState<string>();
 
@@ -54,30 +60,8 @@ const Home = () => {
   const [errorCollection, setErrorCollection] = useState<string>();
 
   const [storeCollection, setStoreCollection] = useState<any[]>([]);
-  const [listCollection, setListCollection] = useState<any[]>([
-    {
-      id: 1,
-      name: "test",
-      collection: [
-        {
-          __typename: "Media",
-          id: 6,
-          title: {
-            __typename: "MediaTitle",
-            romaji: "TRIGUN",
-            english: "Trigun",
-          },
-          coverImage: {
-            __typename: "MediaCoverImage",
-            large:
-              "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6-Zzun7PHNNgPt.jpg",
-            medium:
-              "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx6-Zzun7PHNNgPt.jpg",
-          },
-        },
-      ],
-    },
-  ]);
+  const [listCollection, setListCollection] = useState<any[]>([]);
+
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     currentPage: 1,
     hasNextPage: true,
@@ -124,8 +108,16 @@ const Home = () => {
     };
   }, [errorCollection]);
 
-  const handleAddCollection = (value: any) => {
-    setStoreCollection((prev: any) => [...prev, value]);
+  useEffect(() => {
+    setListCollection(collections);
+  }, [collections]);
+
+  const handleAddCollections = (value: any) => {
+    const isAdded = storeCollection.map((item: any) => item.id);
+
+    if (!isAdded.includes(value.id)) {
+      setStoreCollection((prev: any) => [...prev, value]);
+    }
   };
 
   const handleRemoveCollection = (value: any) => {
@@ -197,12 +189,27 @@ const Home = () => {
         return { ...item };
       }
     });
-
+    addCollection(filterCollection);
     setListCollection(filterCollection);
     setOpenSlide({ open: false, collection: {} });
   };
 
-  const isAdded = storeCollection.map((item: any) => item.id);
+  const checkItemAnime = (id: number, array: any) => {
+    if (!id) {
+      return false;
+    }
+
+    const searchID = array.filter((item: any) => {
+      const ids = item.collection.map((child: any) => child.id);
+      return ids.includes(id);
+    });
+
+    if (searchID.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   return (
     <>
@@ -235,14 +242,14 @@ const Home = () => {
                 data={item}
                 addCollection={() => {
                   if (openSlide.open) {
-                    handleAddCollection(item);
+                    handleAddCollections(item);
                   } else {
                     setOpenSlide({ ...openSlide, collection: item });
                     setOpenModal(true);
                   }
                 }}
                 key={item?.id}
-                isAdded={isAdded.includes(item.id)}
+                isAdded={checkItemAnime(item.id, collections)}
               />
             );
           })}
