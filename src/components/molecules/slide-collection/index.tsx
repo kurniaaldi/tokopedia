@@ -48,14 +48,22 @@ const Icon = styled.div({
 interface IPropsSlideCollection {
   data: any[];
   remove: (id: any) => void;
+  open?: boolean;
+  onAdd: () => void;
+  cancel: () => void;
 }
 
 const SlideCollection = (props: IPropsSlideCollection) => {
-  const { data, remove } = props;
+  const { data, remove, open, onAdd, cancel } = props;
   return (
-    <SlideBottom style={{ background: "black" }}>
+    <SlideBottom open={open} style={{ background: "black" }}>
       <div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
-        <Button fullWidth>Add Collection</Button>
+        <Button onClick={onAdd} fullWidth>
+          Add Collection
+        </Button>
+        <Button onClick={cancel} fullWidth>
+          Cancel
+        </Button>
         {Array.from(data || []).map((item: any, index: number) => {
           return (
             <Card key={index}>

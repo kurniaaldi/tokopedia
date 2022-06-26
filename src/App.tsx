@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Detail from "pages/detail";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "libs/apolloClient";
+import "rc-collapse/assets/index.css";
 
 const Container = styled.div({
   textAlign: "center",

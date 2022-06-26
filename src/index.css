@@ -97,7 +97,8 @@ code {
   position: fixed;
   z-index: 20;
   background: #fff;
-  width: 500px;
+  width: "100%";
+  min-width: 360px;
 
   /* Center the modal */
   top: 50%;

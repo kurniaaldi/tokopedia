@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { Input, Modal, Pagination } from "components/atoms";
 import useAnime, { GET_ANIME_LIST } from "hooks/useAnime";
 import { useLazyQuery } from "@apollo/client";
+import Collapse from "rc-collapse";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -39,9 +40,43 @@ interface PageInfo {
 
 const Home = () => {
   const [valueSearch, setValueSearch] = useState<string>();
-  const [storeCollection, setStoreCollection] = useState<any[]>([]);
+  const [valueCollection, setValueCollection] = useState<string>();
+
   const [listAnime, setListAnime] = useState<any[]>([]);
+
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openSlide, setOpenSlide] = useState({
+    open: false,
+    collection: {} as any,
+  });
+
+  const [errorCollection, setErrorCollection] = useState<string>();
+
+  const [storeCollection, setStoreCollection] = useState<any[]>([]);
+  const [listCollection, setListCollection] = useState<any[]>([
+    {
+      id: 1,
+      name: "test",
+      collection: [
+        {
+          __typename: "Media",
+          id: 6,
+          title: {
+            __typename: "MediaTitle",
+            romaji: "TRIGUN",
+            english: "Trigun",
+          },
+          coverImage: {
+            __typename: "MediaCoverImage",
+            large:
+              "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6-Zzun7PHNNgPt.jpg",
+            medium:
+              "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx6-Zzun7PHNNgPt.jpg",
+          },
+        },
+      ],
+    },
+  ]);
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     currentPage: 1,
     hasNextPage: true,
@@ -77,6 +112,16 @@ const Home = () => {
       setPageInfo(data.Page.pageInfo);
     }
   }, [data]);
+
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      setErrorCollection("");
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [errorCollection]);
 
   const handleAddCollection = (value: any) => {
     setStoreCollection((prev: any) => [...prev, value]);
@@ -123,6 +168,39 @@ const Home = () => {
     });
   };
 
+  const handleNewCollection = () => {
+    const titleCollection = listCollection.map((item: any) => item.name);
+
+    if (!titleCollection.includes(valueCollection)) {
+      setListCollection((prev: any) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          name: valueCollection,
+          collection: [],
+        },
+      ]);
+    } else {
+      setErrorCollection("Collection name must be unique!");
+    }
+  };
+
+  const handleStoreCollection = () => {
+    const filterCollection = listCollection.map((item: any) => {
+      if (item.name === openSlide?.collection?.name) {
+        return {
+          ...item,
+          collection: [...item.collection, ...storeCollection],
+        };
+      } else {
+        return { ...item };
+      }
+    });
+
+    setListCollection(filterCollection);
+    setOpenSlide({ open: false, collection: {} });
+  };
+
   const isAdded = storeCollection.map((item: any) => item.id);
 
   return (
@@ -141,7 +219,14 @@ const Home = () => {
             return (
               <CardAnime
                 data={item}
-                addCollection={() => setOpenModal(true)}
+                addCollection={() => {
+                  if (openSlide.open) {
+                    handleAddCollection(item);
+                  } else {
+                    setOpenSlide({ ...openSlide, collection: item });
+                    setOpenModal(true);
+                  }
+                }}
                 key={item?.id}
                 isAdded={isAdded.includes(item.id)}
               />
@@ -160,11 +245,66 @@ const Home = () => {
           open={openModal}
           handleClose={() => setOpenModal(false)}
         >
-          asd
+          <div
+            style={{ gap: "0.5rem", display: "flex", flexDirection: "column" }}
+          >
+            <Input
+              name="collection"
+              placeholder="collection"
+              value={valueCollection}
+              onChange={(e) => setValueCollection(e.currentTarget.value)}
+              titleButton="Add"
+              onClickButton={() => handleNewCollection()}
+              errorMsg={errorCollection}
+            />
+            <Collapse accordion={true}>
+              {listCollection.map((item: any) => {
+                const collection = item.collection;
+                const name = item.name;
+                return (
+                  <Collapse.Panel
+                    collapsible="header"
+                    header={item.name}
+                    extra={
+                      <p
+                        onClick={() => {
+                          setOpenSlide({
+                            open: true,
+                            collection: {
+                              id: listCollection.length,
+                              name: name,
+                              ...openSlide.collection,
+                            },
+                          });
+                          setStoreCollection([
+                            {
+                              ...openSlide.collection,
+                            },
+                          ]);
+                          setOpenModal(false);
+                        }}
+                      >
+                        Choose
+                      </p>
+                    }
+                  >
+                    <ul style={{ textAlign: "left" }}>
+                      {collection.map((child: any) => {
+                        return <li>{child.title.romaji}</li>;
+                      })}
+                    </ul>
+                  </Collapse.Panel>
+                );
+              })}
+            </Collapse>
+          </div>
         </Modal>
       </WrapperMain>
-      {storeCollection.length && (
+      {openSlide.open && (
         <SlideCollection
+          onAdd={() => handleStoreCollection()}
+          cancel={() => setOpenSlide({ open: false, collection: {} })}
+          open={openSlide.open}
           data={storeCollection}
           remove={(id: any) => handleRemoveCollection(id)}
         />

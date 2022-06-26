@@ -20,11 +20,12 @@ const SlideUpBottom = styled.div(
 interface IPropsSlideBottom {
   children: ReactNode;
   style?: CSSProperties;
+  open?: boolean;
 }
 
 const SlideBottom = (props: IPropsSlideBottom) => {
-  const { children, style } = props;
-  return <SlideUpBottom style={style}>{children}</SlideUpBottom>;
+  const { children, style, open } = props;
+  return <>{open && <SlideUpBottom style={style}>{children}</SlideUpBottom>}</>;
 };
 
 export default SlideBottom;
