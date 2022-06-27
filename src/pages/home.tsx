@@ -112,6 +112,17 @@ const Home = () => {
     setListCollection(collections);
   }, [collections]);
 
+  useEffect(() => {
+    const storageCollection = JSON.parse(
+      window?.localStorage.getItem("collection") || "[]"
+    );
+
+    if (storageCollection.length) {
+      addCollection(storageCollection);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleAddCollections = (value: any) => {
     const isAdded = storeCollection.map((item: any) => item.id);
 
@@ -125,8 +136,6 @@ const Home = () => {
       ...prev.filter((item: any) => item !== value),
     ]);
   };
-
-  // console.log(storeCollection.map((item: any) => item.id));
 
   const handleNextPage = (value: number) => {
     loadAnimeList({
@@ -164,7 +173,7 @@ const Home = () => {
   const handleNewCollection = () => {
     const titleCollection = listCollection.map((item: any) => item.name);
 
-    if (!titleCollection.includes(valueCollection)) {
+    if (!titleCollection.includes(valueCollection) && valueCollection) {
       setListCollection((prev: any) => [
         ...prev,
         {
@@ -173,6 +182,7 @@ const Home = () => {
           collection: [],
         },
       ]);
+      setValueCollection("");
     } else {
       setErrorCollection("Collection name must be unique!");
     }
@@ -190,6 +200,7 @@ const Home = () => {
       }
     });
     addCollection(filterCollection);
+    window.localStorage.setItem("collection", JSON.stringify(filterCollection));
     setListCollection(filterCollection);
     setOpenSlide({ open: false, collection: {} });
   };

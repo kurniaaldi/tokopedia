@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BOOKMARK } from "assets";
 import { Card } from "components/atoms";
-import React from "react";
+import React, { ReactNode } from "react";
 
 const WrapCardCollection = styled.div({
   width: "100%",
@@ -26,7 +26,7 @@ const ShadowCollection = styled.div({
   position: "absolute",
   bottom: 0,
   width: "30%",
-  zIndex: 999999,
+  zIndex: 20,
   padding: "11px 15px",
   paddingTop: 59,
   paddingLeft: 59,
@@ -48,10 +48,11 @@ const Icon = styled.div({
 interface IPropsCardList {
   item: any;
   onClick: () => void;
+  withIcon?: ReactNode;
 }
 
 const CardList = (props: IPropsCardList) => {
-  const { item, onClick } = props;
+  const { item, onClick, withIcon = true } = props;
   return (
     <Card>
       <WrapCardCollection>
@@ -71,9 +72,11 @@ const CardList = (props: IPropsCardList) => {
             {item?.title?.english || item?.title?.romaji}
           </p>
         </div>
-        <Icon onClick={onClick}>
-          <BOOKMARK />
-        </Icon>
+        {withIcon && (
+          <Icon onClick={onClick}>
+            <BOOKMARK />
+          </Icon>
+        )}
       </WrapCardCollection>
     </Card>
   );

@@ -28,6 +28,7 @@ type CoverImage = {
 const CollectionContext = createContext({});
 
 const ADD_COLLECTION = "ADD_COLLECTION";
+const REMOVE_COLLECTION = "REMOVE_COLLECTION";
 
 const INITIAL_STATE = { collections: [] as ItemCollection[] };
 
@@ -40,7 +41,14 @@ const reducer = (state: Types, action: any) => {
 
   switch (type) {
     case ADD_COLLECTION:
-      return { ...state, collections: [...payload] };
+      return { collections: [...payload] };
+
+    case REMOVE_COLLECTION:
+      return {
+        collections: state.collections.filter(
+          (item: any) => item.name !== payload.name
+        ),
+      };
 
     default:
       return state;
@@ -58,14 +66,30 @@ const actions = (initialState: any = INITIAL_STATE) => {
     });
   };
 
-  return { state, addCollection };
+  const editCollection = (data: any) => {
+    dispatch({
+      type: ADD_COLLECTION,
+      payload: data,
+    });
+  };
+
+  const removeCollection = (data: any) => {
+    dispatch({
+      type: REMOVE_COLLECTION,
+      payload: data,
+    });
+  };
+
+  return { state, addCollection, editCollection, removeCollection };
 };
 
 export const CollectionsProvider = ({ children }: any) => {
-  const { state, addCollection } = actions();
+  const { state, addCollection, editCollection, removeCollection } = actions();
 
   return (
-    <CollectionContext.Provider value={{ state, addCollection }}>
+    <CollectionContext.Provider
+      value={{ state, addCollection, editCollection, removeCollection }}
+    >
       {children}
     </CollectionContext.Provider>
   );
