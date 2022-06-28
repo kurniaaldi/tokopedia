@@ -31,6 +31,7 @@ const ADD_COLLECTION = "ADD_COLLECTION";
 const EDIT_COLLECTION = "EDIT_COLLECTION";
 const REMOVE_COLLECTION = "REMOVE_COLLECTION";
 const REMOVE_ANIME = "REMOVE_ANIME";
+const ADD_ANIME = "ADD_ANIME";
 
 const INITIAL_STATE = { collections: [] as ItemCollection[] };
 
@@ -78,6 +79,17 @@ const reducer = (state: Types, action: any) => {
         }),
       };
 
+    case ADD_ANIME:
+      return {
+        collections: state.collections.map((item: any) => {
+          if (item.name === payload.name) {
+            return { ...item, collection: [...item.collection, payload.item] };
+          } else {
+            return item;
+          }
+        }),
+      };
+
     default:
       return state;
   }
@@ -114,12 +126,20 @@ const actions = (initialState: any = INITIAL_STATE) => {
     });
   };
 
+  const addAnime = (data: any) => {
+    dispatch({
+      type: ADD_ANIME,
+      payload: data,
+    });
+  };
+
   return {
     state,
     addCollection,
     editCollection,
     removeCollection,
     removeAnime,
+    addAnime,
   };
 };
 
@@ -130,6 +150,7 @@ export const CollectionsProvider = ({ children }: any) => {
     editCollection,
     removeCollection,
     removeAnime,
+    addAnime,
   } = actions();
 
   return (
@@ -140,6 +161,7 @@ export const CollectionsProvider = ({ children }: any) => {
         editCollection,
         removeCollection,
         removeAnime,
+        addAnime,
       }}
     >
       {children}

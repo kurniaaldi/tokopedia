@@ -1,8 +1,12 @@
 import styled from "@emotion/styled";
-import { Button } from "components/atoms";
+import { Button, Dialog, Modal } from "components/atoms";
 import { BOOKMARK, STAR } from "assets";
 import { useParams } from "react-router-dom";
 import useAnime from "hooks/useAnime";
+import { useCollection } from "store/collection";
+import { checkItemAnime } from "utils/checkAlreadyAdded";
+import Collapse from "rc-collapse";
+import { useState } from "react";
 
 const WrapperBox = styled.div(
   {
@@ -64,7 +68,18 @@ const BoxSpesifikasi = styled.div({
 });
 
 const Detail = () => {
+  const {
+    state: { collections },
+    addAnime,
+    removeAnime,
+  }: any = useCollection();
   const { id } = useParams();
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [dialog, setDialog] = useState({
+    open: false,
+    onCancel: () => {},
+    onOke: () => {},
+  });
 
   const { getDetailAnimeList } = useAnime({
     detail: {
@@ -76,6 +91,15 @@ const Detail = () => {
   });
 
   const { data, loading } = getDetailAnimeList;
+
+  const isAdded = checkItemAnime(parseInt(id as string), collections) || false;
+
+  const simpleDataAnime = {
+    __typename: "Media",
+    id: data?.Media?.id,
+    title: data?.Media?.title,
+    coverImage: data?.Media?.coverImage,
+  };
 
   if (loading) return <p>loading...</p>;
   return (
@@ -140,7 +164,24 @@ const Detail = () => {
               gap: "0.5rem",
             }}
           >
-            <Button prefix={<BOOKMARK />}>Tambahkan Favorit</Button>
+            <Button
+              onClick={() =>
+                !isAdded
+                  ? setOpenModal(true)
+                  : setDialog({
+                      open: true,
+                      onCancel: () =>
+                        setDialog((prev: any) => ({ ...prev, open: false })),
+                      onOke: () => {
+                        removeAnime(parseInt(id as string));
+                        setDialog((prev: any) => ({ ...prev, open: false }));
+                      },
+                    })
+              }
+              prefix={<BOOKMARK color={isAdded && "#FF7D75"} />}
+            >
+              Tambahkan Favorit
+            </Button>
           </div>
         </div>
       </WrapperBox>
@@ -187,6 +228,66 @@ const Detail = () => {
           />
         </BoxSpesifikasi>
       </WrapperBox>
+      <Modal
+        title="Add Collection"
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+      >
+        <div
+          style={{ gap: "0.5rem", display: "flex", flexDirection: "column" }}
+        >
+          <Collapse accordion={true}>
+            {collections.map((item: any) => {
+              const collection = item.collection;
+              return (
+                <Collapse.Panel
+                  collapsible="header"
+                  header={item.name}
+                  extra={
+                    <p
+                      onClick={() => {
+                        addAnime({ name: item.name, item: simpleDataAnime });
+                        setOpenModal(false);
+                      }}
+                    >
+                      Choose
+                    </p>
+                  }
+                >
+                  <ul style={{ textAlign: "left" }}>
+                    {collection.map((child: any) => {
+                      return <li>{child.title.romaji}</li>;
+                    })}
+                  </ul>
+                </Collapse.Panel>
+              );
+            })}
+          </Collapse>
+        </div>
+      </Modal>
+      <Dialog
+        title={<h4>Are You Sure, want remove ANIME from collection?</h4>}
+        open={dialog.open}
+        handleClose={() => dialog.onCancel()}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: "0.5rem",
+          }}
+        >
+          <Button
+            onClick={() => {
+              dialog.onOke();
+            }}
+          >
+            Ok
+          </Button>
+          <Button onClick={() => dialog.onCancel()}>cancel</Button>
+        </div>
+      </Dialog>
     </div>
   );
 };

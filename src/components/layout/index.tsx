@@ -29,11 +29,14 @@ const WrapperMain = styled.main({
 
 const Layout = (props: any) => {
   const { children } = props;
-  const { addCollection }: any = useCollection();
+  const {
+    state: { collections },
+    addCollection,
+  }: any = useCollection();
 
   useEffect(() => {
     const storageCollection = JSON.parse(
-      window?.localStorage.getItem("collection") || "[]"
+      window?.localStorage?.getItem("collection") || "[]"
     );
 
     if (storageCollection.length) {
@@ -41,6 +44,13 @@ const Layout = (props: any) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (collections?.length) {
+      window?.localStorage.setItem("collection", JSON.stringify(collections));
+    }
+  }, [collections]);
+
   return (
     <Container>
       <head

@@ -5,22 +5,8 @@ import { Input, Modal, Pagination } from "components/atoms";
 import useAnime, { GET_ANIME_LIST } from "hooks/useAnime";
 import { useLazyQuery } from "@apollo/client";
 import Collapse from "rc-collapse";
-import { Link } from "react-router-dom";
 import { useCollection } from "store/collection";
-
-const WrapperMain = styled.main({
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-  gap: "2rem",
-  padding: "1rem",
-  "@media only screen and (min-width: 420px)": {
-    padding: "2rem",
-  },
-});
+import { checkItemAnime } from "utils/checkAlreadyAdded";
 
 const WrapperCard = styled.section({
   display: "grid",
@@ -192,23 +178,6 @@ const Home = () => {
     window.localStorage.setItem("collection", JSON.stringify(filterCollection));
     setListCollection(filterCollection);
     setOpenSlide({ open: false, collection: {} });
-  };
-
-  const checkItemAnime = (id: number, array: any) => {
-    if (!id) {
-      return false;
-    }
-
-    const searchID = array.filter((item: any) => {
-      const ids = item.collection.map((child: any) => child.id);
-      return ids.includes(id);
-    });
-
-    if (searchID.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   return (

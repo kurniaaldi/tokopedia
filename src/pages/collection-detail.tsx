@@ -212,7 +212,7 @@ const CollectionDetail = () => {
       </Dialog>
 
       <Dialog
-        title={<h4>Are You Sure, want delete ANIME permanent?</h4>}
+        title={<h4>Are You Sure, want delete ANIME from collection?</h4>}
         open={dialog.open}
         handleClose={() => dialog.onCancel()}
       >
