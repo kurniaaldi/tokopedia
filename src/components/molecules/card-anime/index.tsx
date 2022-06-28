@@ -1,6 +1,6 @@
 import { BOOKMARK } from "assets";
 import { Card } from "components/atoms";
-import React from "react";
+import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
@@ -45,19 +45,20 @@ const Icon = styled.div({
 });
 
 interface IPropsCardAnime {
-  addCollection: () => void;
+  clickIcon: () => void;
   data: any;
   isAdded: boolean;
+  customIcon?: ReactNode;
 }
 
 const CardAnime = (props: IPropsCardAnime) => {
-  const { addCollection, data, isAdded } = props;
+  const { clickIcon, data, isAdded, customIcon } = props;
 
   return (
     <Card>
       <WrapperRoot>
-        <Icon onClick={addCollection}>
-          <BOOKMARK color={isAdded && "#FF7D75"} />
+        <Icon onClick={clickIcon}>
+          {customIcon ? customIcon : <BOOKMARK color={isAdded && "#FF7D75"} />}
         </Icon>
         <Link to={`/anime/${data?.id}`}>
           <Image

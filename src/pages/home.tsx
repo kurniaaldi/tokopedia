@@ -251,7 +251,7 @@ const Home = () => {
             return (
               <CardAnime
                 data={item}
-                addCollection={() => {
+                clickIcon={() => {
                   if (openSlide.open) {
                     handleAddCollections(item);
                   } else {

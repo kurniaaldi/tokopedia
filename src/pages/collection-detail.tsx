@@ -1,11 +1,10 @@
 import { CardAnime } from "components/molecules";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { Input, Modal, Pagination } from "components/atoms";
-import useAnime, { GET_ANIME_LIST } from "hooks/useAnime";
-import { useLazyQuery } from "@apollo/client";
-import Collapse from "rc-collapse";
+import { Button, Dialog, Input } from "components/atoms";
 import { useCollection } from "store/collection";
+import { useNavigate, useParams } from "react-router-dom";
+import { EDIT, TRASH } from "assets";
 
 const WrapperMain = styled.main({
   width: "100%",
@@ -31,70 +30,40 @@ const WrapperCard = styled.section({
   },
 });
 
-interface PageInfo {
-  currentPage: number;
-  hasNextPage: boolean;
-  lastPage: number;
-  perPage: number;
-  total: number;
-}
+const Title = styled.p({
+  margin: 0,
+  color: "#007aff",
+});
+
+const H3 = styled.h3({
+  margin: 0,
+  color: "#007aff",
+  display: "flex",
+  alignItems: "center",
+  gap: "0.5rem",
+});
 
 const CollectionDetail = () => {
   const {
     state: { collections },
+    removeAnime,
+    editCollection,
   }: any = useCollection();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const [valueSearch, setValueSearch] = useState<string>();
-  const [valueCollection, setValueCollection] = useState<string>();
+  const [dialogEditCollection, setDialogEditCollection] = useState(false);
+  const [valueEditCollection, setValueEditCollection] = useState<string>();
 
-  const [listAnime, setListAnime] = useState<any[]>([]);
-
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [openSlide, setOpenSlide] = useState({
-    open: false,
-    collection: {} as any,
-  });
+  const [listAnime, setListAnime] = useState<any>({});
 
   const [errorCollection, setErrorCollection] = useState<string>();
 
-  const [storeCollection, setStoreCollection] = useState<any[]>([]);
-  const [listCollection, setListCollection] = useState<any[]>([]);
-
-  const [pageInfo, setPageInfo] = useState<PageInfo>({
-    currentPage: 1,
-    hasNextPage: true,
-    lastPage: 0,
-    perPage: 0,
-    total: 0,
+  const [dialog, setDialog] = useState({
+    open: false,
+    onCancel: () => {},
+    onOke: () => {},
   });
-
-  const { getAnimeList } = useAnime({
-    getData: {
-      variables: {
-        page: 1,
-        perPage: 10,
-      },
-    },
-  });
-
-  const [loadAnimeList] = useLazyQuery(GET_ANIME_LIST, {
-    onCompleted: async (response: any) => {
-      const { media, pageInfo } = response?.Page;
-      if (media?.length || pageInfo) {
-        setListAnime(media);
-        setPageInfo(pageInfo);
-      }
-    },
-  });
-
-  const { data } = getAnimeList;
-
-  useEffect(() => {
-    if (data?.Page?.media?.length || data?.Page?.pageInfo) {
-      setListAnime(data.Page.media);
-      setPageInfo(data.Page.pageInfo);
-    }
-  }, [data]);
 
   useEffect(() => {
     const timeOut = setTimeout(() => {
@@ -107,181 +76,182 @@ const CollectionDetail = () => {
   }, [errorCollection]);
 
   useEffect(() => {
-    setListCollection(collections);
-  }, [collections]);
-
-  const handleAddCollections = (value: any) => {
-    const isAdded = storeCollection.map((item: any) => item.id);
-
-    if (!isAdded.includes(value.id)) {
-      setStoreCollection((prev: any) => [...prev, value]);
+    if (id) {
+      let findCollection = collections
+        .map((loop: any, idx: number) => ({ ...loop, index: idx }))
+        .filter((item: any) => item.id === parseInt(id))[0];
+      setListAnime(findCollection);
+      window.localStorage.setItem("collection", JSON.stringify(collections));
     }
-  };
+  }, [collections, id]);
 
-  const handleNextPage = (value: number) => {
-    loadAnimeList({
-      fetchPolicy: "network-only",
-      variables: {
-        page: value + 1,
-        perPage: 10,
-        search: valueSearch,
-      },
-    });
-  };
+  const handleEditCollection = () => {
+    const titleCollection = collections.map((item: any) => item.name);
 
-  const handlePreviousPage = (value: number) => {
-    loadAnimeList({
-      fetchPolicy: "network-only",
-      variables: {
-        page: value - 1,
-        perPage: 10,
-        search: valueSearch,
-      },
-    });
-  };
+    if (!titleCollection.includes(valueEditCollection) && valueEditCollection) {
+      let newCollection = collections.map((item: any) => {
+        if (item.name === listAnime.name) {
+          return {
+            ...item,
+            name: valueEditCollection,
+          };
+        } else {
+          return item;
+        }
+      });
 
-  const handleSearchAnime = () => {
-    loadAnimeList({
-      fetchPolicy: "network-only",
-      variables: {
-        page: 1,
-        perPage: 10,
-        search: valueSearch,
-      },
-    });
-  };
-
-  const handleNewCollection = () => {
-    const titleCollection = listCollection.map((item: any) => item.name);
-
-    if (!titleCollection.includes(valueCollection)) {
-      setListCollection((prev: any) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          name: valueCollection,
-          collection: [],
-        },
-      ]);
+      editCollection({ item: listAnime, value: valueEditCollection });
+      window.localStorage.setItem("collection", JSON.stringify(newCollection));
+      setDialogEditCollection(false);
+      setValueEditCollection("");
     } else {
       setErrorCollection("Collection name must be unique!");
-    }
-  };
-
-  const checkItemAnime = (id: number, array: any) => {
-    if (!id) {
-      return false;
-    }
-
-    const searchID = array.filter((item: any) => {
-      const ids = item.collection.map((child: any) => child.id);
-      return ids.includes(id);
-    });
-
-    if (searchID.length > 0) {
-      return true;
-    } else {
-      return false;
     }
   };
 
   return (
     <>
       <WrapperMain>
-        <Input
-          name="search"
-          placeholder="Search..."
-          value={valueSearch}
-          onChange={(e) => setValueSearch(e.currentTarget.value)}
-          titleButton="Search"
-          onClickButton={() => handleSearchAnime()}
-        />
+        <div
+          style={{
+            width: "100%",
+            maxHeight: "5rem",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0.5rem 0",
+          }}
+        >
+          <div style={{ minWidth: "20%" }}>
+            {listAnime?.index > 0 && (
+              <Title
+                onClick={() =>
+                  navigate(
+                    `/collection/${collections?.[listAnime.index - 1]?.id}`
+                  )
+                }
+              >
+                {listAnime.index > 0
+                  ? collections?.[listAnime.index - 1]?.name
+                  : ""}
+              </Title>
+            )}
+          </div>
+          <H3
+            onClick={() => {
+              setValueEditCollection(listAnime?.name);
+
+              setDialogEditCollection(true);
+            }}
+          >
+            {listAnime?.name} <EDIT style={{ width: 15, height: 15 }} />
+          </H3>
+          <div style={{ minWidth: "20%" }}>
+            {collections.length > listAnime?.index + 1 && (
+              <Title
+                onClick={() =>
+                  navigate(
+                    `/collection/${collections?.[listAnime.index + 1]?.id}`
+                  )
+                }
+              >
+                {collections.length > listAnime?.index + 1 &&
+                  collections?.[listAnime?.index + 1]?.name}
+              </Title>
+            )}
+          </div>
+        </div>
 
         <WrapperCard>
-          {listAnime.map((item: any) => {
+          {Array.from(listAnime.collection || []).map((item: any) => {
             return (
               <CardAnime
+                customIcon={
+                  <div
+                    style={{
+                      padding: 2,
+                      borderRadius: "50%",
+                      background: "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TRASH />
+                  </div>
+                }
                 data={item}
-                addCollection={() => {
-                  if (openSlide.open) {
-                    handleAddCollections(item);
-                  } else {
-                    setOpenSlide({ ...openSlide, collection: item });
-                    setOpenModal(true);
-                  }
+                clickIcon={() => {
+                  setDialog({
+                    open: true,
+                    onCancel: () =>
+                      setDialog((prev: any) => ({ ...prev, open: false })),
+                    onOke: () => {
+                      removeAnime(item.id);
+                      setDialog((prev: any) => ({ ...prev, open: false }));
+                    },
+                  });
                 }}
                 key={item?.id}
-                isAdded={checkItemAnime(item.id, collections)}
+                isAdded={true}
               />
             );
           })}
         </WrapperCard>
-        <Pagination
-          currentPage={pageInfo?.currentPage}
-          hasNextPage={pageInfo?.hasNextPage}
-          next={(page) => handleNextPage(page)}
-          previous={(page) => handlePreviousPage(page)}
-          total={pageInfo?.total}
-        />
-        <Modal
-          title="Add Collection"
-          open={openModal}
-          handleClose={() => setOpenModal(false)}
-        >
-          <div
-            style={{ gap: "0.5rem", display: "flex", flexDirection: "column" }}
-          >
+
+        <Dialog
+          title={
             <Input
               name="collection"
               placeholder="collection"
-              value={valueCollection}
-              onChange={(e) => setValueCollection(e.currentTarget.value)}
-              titleButton="Add"
-              onClickButton={() => handleNewCollection()}
+              value={valueEditCollection}
+              onChange={(e) => setValueEditCollection(e.currentTarget.value)}
+              titleButton="Edit"
               errorMsg={errorCollection}
             />
-            <Collapse accordion={true}>
-              {listCollection.map((item: any) => {
-                const collection = item.collection;
-                const name = item.name;
-                return (
-                  <Collapse.Panel
-                    collapsible="header"
-                    header={item.name}
-                    extra={
-                      <p
-                        onClick={() => {
-                          setOpenSlide({
-                            open: true,
-                            collection: {
-                              id: listCollection.length,
-                              name: name,
-                              ...openSlide.collection,
-                            },
-                          });
-                          setStoreCollection([
-                            {
-                              ...openSlide.collection,
-                            },
-                          ]);
-                          setOpenModal(false);
-                        }}
-                      >
-                        Choose
-                      </p>
-                    }
-                  >
-                    <ul style={{ textAlign: "left" }}>
-                      {collection.map((child: any) => {
-                        return <li>{child.title.romaji}</li>;
-                      })}
-                    </ul>
-                  </Collapse.Panel>
-                );
-              })}
-            </Collapse>
+          }
+          open={dialogEditCollection}
+          handleClose={() => setDialogEditCollection(false)}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: "0.5rem",
+            }}
+          >
+            <Button onClick={() => handleEditCollection()}>Edit</Button>
+            <Button onClick={() => setDialogEditCollection(false)}>
+              cancel
+            </Button>
           </div>
-        </Modal>
+        </Dialog>
+
+        <Dialog
+          title={<h4>Are You Sure, want delete ANIME permanent?</h4>}
+          open={dialog.open}
+          handleClose={() => dialog.onCancel()}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: "0.5rem",
+            }}
+          >
+            <Button
+              onClick={() => {
+                dialog.onOke();
+              }}
+            >
+              Ok
+            </Button>
+            <Button onClick={() => dialog.onCancel()}>cancel</Button>
+          </div>
+        </Dialog>
       </WrapperMain>
     </>
   );

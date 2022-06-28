@@ -36,6 +36,7 @@ const WrapperBox = styled.div(
 );
 
 const Title = styled.p({
+  textAlign: "left",
   margin: 0,
   color: "#ccc",
   textShadow:
@@ -52,12 +53,13 @@ const H4 = styled.h4({
 
 const Subtitle = styled.p(
   {
+    textAlign: "left",
     margin: 0,
     color: "#ccc",
     textShadow:
       "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
   },
-  (props: any) => ({ ...props, textAlign: props.textAlign || "center" })
+  (props: any) => ({ ...props })
 );
 
 const BoxSpesifikasi = styled.div({
@@ -87,8 +89,9 @@ const Detail = () => {
     },
   });
 
-  const { data } = getDetailAnimeList;
+  const { data, loading } = getDetailAnimeList;
 
+  if (loading) return <p>loading...</p>;
   return (
     <WrapperMain>
       <WrapperBox>
@@ -130,16 +133,7 @@ const Detail = () => {
             zIndex: 2,
           }}
         >
-          <H4
-            style={{
-              margin: 0,
-              color: "#fff",
-              textShadow:
-                "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
-            }}
-          >
-            {data?.Media?.title.english || data?.Media?.title.romaji}
-          </H4>
+          <H4>{data?.Media?.title.english || data?.Media?.title.romaji}</H4>
           <H4
             style={{
               margin: 0,

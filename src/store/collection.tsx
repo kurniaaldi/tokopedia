@@ -28,7 +28,9 @@ type CoverImage = {
 const CollectionContext = createContext({});
 
 const ADD_COLLECTION = "ADD_COLLECTION";
+const EDIT_COLLECTION = "EDIT_COLLECTION";
 const REMOVE_COLLECTION = "REMOVE_COLLECTION";
+const REMOVE_ANIME = "REMOVE_ANIME";
 
 const INITIAL_STATE = { collections: [] as ItemCollection[] };
 
@@ -50,6 +52,32 @@ const reducer = (state: Types, action: any) => {
         ),
       };
 
+    case EDIT_COLLECTION:
+      return {
+        collections: state.collections.map((item: any) => {
+          if (item.name === payload.item.name) {
+            return {
+              ...item,
+              name: payload.value,
+            };
+          } else {
+            return item;
+          }
+        }),
+      };
+
+    case REMOVE_ANIME:
+      return {
+        collections: state.collections.map((item: any) => {
+          return {
+            ...item,
+            collection: item.collection.filter(
+              (fill: any) => fill.id !== payload
+            ),
+          };
+        }),
+      };
+
     default:
       return state;
   }
@@ -68,7 +96,7 @@ const actions = (initialState: any = INITIAL_STATE) => {
 
   const editCollection = (data: any) => {
     dispatch({
-      type: ADD_COLLECTION,
+      type: EDIT_COLLECTION,
       payload: data,
     });
   };
@@ -79,16 +107,40 @@ const actions = (initialState: any = INITIAL_STATE) => {
       payload: data,
     });
   };
+  const removeAnime = (data: any) => {
+    dispatch({
+      type: REMOVE_ANIME,
+      payload: data,
+    });
+  };
 
-  return { state, addCollection, editCollection, removeCollection };
+  return {
+    state,
+    addCollection,
+    editCollection,
+    removeCollection,
+    removeAnime,
+  };
 };
 
 export const CollectionsProvider = ({ children }: any) => {
-  const { state, addCollection, editCollection, removeCollection } = actions();
+  const {
+    state,
+    addCollection,
+    editCollection,
+    removeCollection,
+    removeAnime,
+  } = actions();
 
   return (
     <CollectionContext.Provider
-      value={{ state, addCollection, editCollection, removeCollection }}
+      value={{
+        state,
+        addCollection,
+        editCollection,
+        removeCollection,
+        removeAnime,
+      }}
     >
       {children}
     </CollectionContext.Provider>

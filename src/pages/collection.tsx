@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useCollection } from "store/collection";
 import { useNavigate } from "react-router-dom";
 import { Button, Dialog, Input, Modal } from "components/atoms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Collapse from "rc-collapse";
 
 const WrapperMain = styled.main({
@@ -56,6 +56,16 @@ const Collections = () => {
     onOke: () => {},
   });
 
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      setErrorCollection("");
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [errorCollection]);
+
   const handleDeleteCollection = (value: any) => {
     const filterCollection = collections.filter(
       (item: any) => item.name !== value.name
@@ -88,7 +98,7 @@ const Collections = () => {
   const handleEditCollection = () => {
     const titleCollection = collections.map((item: any) => item.name);
 
-    if (!titleCollection.includes(valueCollection) && valueEditCollection) {
+    if (!titleCollection.includes(valueEditCollection) && valueEditCollection) {
       let newCollection = collections.map((item: any) => {
         if (item.name === itemCollection.name) {
           return {
@@ -100,7 +110,7 @@ const Collections = () => {
         }
       });
 
-      editCollection(newCollection);
+      editCollection({ item: itemCollection, value: valueEditCollection });
       window.localStorage.setItem("collection", JSON.stringify(newCollection));
       setDialogEditCollection(false);
       setValueEditCollection("");
