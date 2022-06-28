@@ -1,5 +1,4 @@
 import "./App.css";
-import styled from "@emotion/styled";
 import Home from "pages/home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Detail from "pages/detail";
@@ -9,14 +8,7 @@ import "rc-collapse/assets/index.css";
 import Collections from "pages/collection";
 import { CollectionsProvider } from "store/collection";
 import CollectionDetail from "pages/collection-detail";
-
-const Container = styled.div({
-  textAlign: "center",
-  maxWidth: 1060,
-  background: "#111",
-  minHeight: "100vh",
-  margin: "0 auto",
-});
+import Layout from "components/layout";
 
 const App = () => {
   const client = useApollo();
@@ -25,7 +17,7 @@ const App = () => {
     <ApolloProvider client={client}>
       <CollectionsProvider>
         <Router>
-          <Container>
+          <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
             </Routes>
@@ -38,7 +30,7 @@ const App = () => {
             <Routes>
               <Route path="/collection/:id" element={<CollectionDetail />} />
             </Routes>
-          </Container>
+          </Layout>
         </Router>
       </CollectionsProvider>
     </ApolloProvider>

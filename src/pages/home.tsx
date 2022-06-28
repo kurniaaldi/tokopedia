@@ -112,17 +112,6 @@ const Home = () => {
     setListCollection(collections);
   }, [collections]);
 
-  useEffect(() => {
-    const storageCollection = JSON.parse(
-      window?.localStorage.getItem("collection") || "[]"
-    );
-
-    if (storageCollection.length) {
-      addCollection(storageCollection);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleAddCollections = (value: any) => {
     const isAdded = storeCollection.map((item: any) => item.id);
 
@@ -224,114 +213,100 @@ const Home = () => {
 
   return (
     <>
-      <WrapperMain>
-        <Input
-          name="search"
-          placeholder="Search..."
-          value={valueSearch}
-          onChange={(e) => setValueSearch(e.currentTarget.value)}
-          titleButton="Search"
-          onClickButton={() => handleSearchAnime()}
-        />
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Link style={{ textDecoration: "none" }} to="/collections">
-            <h4 style={{ margin: 0, color: "#007aff" }}>Collections</h4>
-          </Link>
-        </div>
-        <WrapperCard>
-          {listAnime.map((item: any) => {
-            return (
-              <CardAnime
-                data={item}
-                clickIcon={() => {
-                  if (openSlide.open) {
-                    handleAddCollections(item);
-                  } else {
-                    setOpenSlide({ ...openSlide, collection: item });
-                    setOpenModal(true);
-                  }
-                }}
-                key={item?.id}
-                isAdded={checkItemAnime(item.id, collections)}
-              />
-            );
-          })}
-        </WrapperCard>
-        <Pagination
-          currentPage={pageInfo?.currentPage}
-          hasNextPage={pageInfo?.hasNextPage}
-          next={(page) => handleNextPage(page)}
-          previous={(page) => handlePreviousPage(page)}
-          total={pageInfo?.total}
-        />
-        <Modal
-          title="Add Collection"
-          open={openModal}
-          handleClose={() => setOpenModal(false)}
-        >
-          <div
-            style={{ gap: "0.5rem", display: "flex", flexDirection: "column" }}
-          >
-            <Input
-              name="collection"
-              placeholder="collection"
-              value={valueCollection}
-              onChange={(e) => setValueCollection(e.currentTarget.value)}
-              titleButton="Add"
-              onClickButton={() => handleNewCollection()}
-              errorMsg={errorCollection}
+      <Input
+        name="search"
+        placeholder="Search..."
+        value={valueSearch}
+        onChange={(e) => setValueSearch(e.currentTarget.value)}
+        titleButton="Search"
+        onClickButton={() => handleSearchAnime()}
+      />
+
+      <WrapperCard>
+        {listAnime.map((item: any) => {
+          return (
+            <CardAnime
+              data={item}
+              clickIcon={() => {
+                if (openSlide.open) {
+                  handleAddCollections(item);
+                } else {
+                  setOpenSlide({ ...openSlide, collection: item });
+                  setOpenModal(true);
+                }
+              }}
+              key={item?.id}
+              isAdded={checkItemAnime(item.id, collections)}
             />
-            <Collapse accordion={true}>
-              {listCollection.map((item: any) => {
-                const collection = item.collection;
-                const name = item.name;
-                return (
-                  <Collapse.Panel
-                    collapsible="header"
-                    header={item.name}
-                    extra={
-                      <p
-                        onClick={() => {
-                          setOpenSlide({
-                            open: true,
-                            collection: {
-                              id: listCollection.length,
-                              name: name,
-                              ...openSlide.collection,
-                            },
-                          });
-                          setStoreCollection([
-                            {
-                              ...openSlide.collection,
-                            },
-                          ]);
-                          setOpenModal(false);
-                        }}
-                      >
-                        Choose
-                      </p>
-                    }
-                  >
-                    <ul style={{ textAlign: "left" }}>
-                      {collection.map((child: any) => {
-                        return <li>{child.title.romaji}</li>;
-                      })}
-                    </ul>
-                  </Collapse.Panel>
-                );
-              })}
-            </Collapse>
-          </div>
-        </Modal>
-      </WrapperMain>
+          );
+        })}
+      </WrapperCard>
+      <Pagination
+        currentPage={pageInfo?.currentPage}
+        hasNextPage={pageInfo?.hasNextPage}
+        next={(page) => handleNextPage(page)}
+        previous={(page) => handlePreviousPage(page)}
+        total={pageInfo?.total}
+      />
+      <Modal
+        title="Add Collection"
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+      >
+        <div
+          style={{ gap: "0.5rem", display: "flex", flexDirection: "column" }}
+        >
+          <Input
+            name="collection"
+            placeholder="collection"
+            value={valueCollection}
+            onChange={(e) => setValueCollection(e.currentTarget.value)}
+            titleButton="Add"
+            onClickButton={() => handleNewCollection()}
+            errorMsg={errorCollection}
+          />
+          <Collapse accordion={true}>
+            {listCollection.map((item: any) => {
+              const collection = item.collection;
+              const name = item.name;
+              return (
+                <Collapse.Panel
+                  collapsible="header"
+                  header={item.name}
+                  extra={
+                    <p
+                      onClick={() => {
+                        setOpenSlide({
+                          open: true,
+                          collection: {
+                            id: listCollection.length,
+                            name: name,
+                            ...openSlide.collection,
+                          },
+                        });
+                        setStoreCollection([
+                          {
+                            ...openSlide.collection,
+                          },
+                        ]);
+                        setOpenModal(false);
+                      }}
+                    >
+                      Choose
+                    </p>
+                  }
+                >
+                  <ul style={{ textAlign: "left" }}>
+                    {collection.map((child: any) => {
+                      return <li>{child.title.romaji}</li>;
+                    })}
+                  </ul>
+                </Collapse.Panel>
+              );
+            })}
+          </Collapse>
+        </div>
+      </Modal>
       {openSlide.open && (
         <SlideCollection
           onAdd={() => handleStoreCollection()}

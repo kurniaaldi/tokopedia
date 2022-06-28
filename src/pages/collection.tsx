@@ -6,20 +6,6 @@ import { Button, Dialog, Input, Modal } from "components/atoms";
 import { useEffect, useState } from "react";
 import Collapse from "rc-collapse";
 
-const WrapperMain = styled.main({
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-  gap: "2rem",
-  padding: "1rem",
-  "@media only screen and (min-width: 420px)": {
-    padding: "2rem",
-  },
-});
-
 const Icon = styled.div({
   borderRadius: "50%",
   padding: 5,
@@ -120,17 +106,10 @@ const Collections = () => {
   };
 
   return (
-    <WrapperMain>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button onClick={() => setOpenModal(true)}>New Collection</Button>
-      </div>
+    <>
+      <Button fullWidth onClick={() => setOpenModal(true)}>
+        New Collection
+      </Button>
       <div
         style={{
           width: "100%",
@@ -327,7 +306,7 @@ const Collections = () => {
           <Button onClick={() => dialog.onCancel()}>cancel</Button>
         </div>
       </Dialog>
-    </WrapperMain>
+    </>
   );
 };
 

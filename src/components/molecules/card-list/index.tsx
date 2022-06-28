@@ -65,6 +65,7 @@ const CardList = (props: IPropsCardList) => {
           <p
             style={{
               color: "#fff",
+              textAlign: "left",
               textShadow:
                 "-1px -1px 5px #000, 1px -1px 5px #000, -1px 1px 5px #000, 0 3px 2px #000",
             }}

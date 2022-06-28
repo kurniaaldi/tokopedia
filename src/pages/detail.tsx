@@ -4,20 +4,6 @@ import { BOOKMARK, STAR } from "assets";
 import { useParams } from "react-router-dom";
 import useAnime from "hooks/useAnime";
 
-const WrapperMain = styled.main({
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-  gap: "2rem",
-  padding: "1rem",
-  "@media only screen and (min-width: 420px)": {
-    padding: "2rem",
-  },
-});
-
 const WrapperBox = styled.div(
   {
     width: "100%",
@@ -93,7 +79,7 @@ const Detail = () => {
 
   if (loading) return <p>loading...</p>;
   return (
-    <WrapperMain>
+    <div>
       <WrapperBox>
         <img
           src={data?.Media?.coverImage.large}
@@ -201,7 +187,7 @@ const Detail = () => {
           />
         </BoxSpesifikasi>
       </WrapperBox>
-    </WrapperMain>
+    </div>
   );
 };
 
