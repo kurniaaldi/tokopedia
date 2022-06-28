@@ -229,7 +229,9 @@ const Home = () => {
             name="collection"
             placeholder="collection"
             value={valueCollection}
-            onChange={(e) => setValueCollection(e.currentTarget.value)}
+            onChange={(e) =>
+              setValueCollection(e.currentTarget.value.replace(/[^\w\s]/gi, ""))
+            }
             titleButton="Add"
             onClickButton={() => handleNewCollection()}
             errorMsg={errorCollection}

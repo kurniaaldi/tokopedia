@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Dialog, Modal } from "components/atoms";
+import { Button, Dialog, Input, Modal } from "components/atoms";
 import { BOOKMARK, STAR } from "assets";
 import { useParams } from "react-router-dom";
 import useAnime from "hooks/useAnime";
@@ -72,9 +72,13 @@ const Detail = () => {
     state: { collections },
     addAnime,
     removeAnime,
+    addCollection,
   }: any = useCollection();
   const { id } = useParams();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [valueCollection, setValueCollection] = useState<string>();
+  const [errorCollection, setErrorCollection] = useState<string>();
+
   const [dialog, setDialog] = useState({
     open: false,
     onCancel: () => {},
@@ -89,6 +93,26 @@ const Detail = () => {
       },
     },
   });
+
+  const handleNewCollection = () => {
+    const titleCollection = collections.map((item: any) => item.name);
+
+    if (!titleCollection.includes(valueCollection) && valueCollection) {
+      let newCollection = [
+        ...collections,
+        {
+          id: collections.length + 1,
+          name: valueCollection,
+          collection: [],
+        },
+      ];
+      addCollection(newCollection);
+
+      setValueCollection("");
+    } else {
+      setErrorCollection("Collection name must be unique!");
+    }
+  };
 
   const { data, loading } = getDetailAnimeList;
 
@@ -236,11 +260,23 @@ const Detail = () => {
         <div
           style={{ gap: "0.5rem", display: "flex", flexDirection: "column" }}
         >
+          <Input
+            name="collection"
+            placeholder="collection"
+            value={valueCollection}
+            onChange={(e) =>
+              setValueCollection(e.currentTarget.value.replace(/[^\w\s]/gi, ""))
+            }
+            titleButton="Add"
+            onClickButton={() => handleNewCollection()}
+            errorMsg={errorCollection}
+          />
           <Collapse accordion={true}>
             {collections.map((item: any) => {
               const collection = item.collection;
               return (
                 <Collapse.Panel
+                  key={item.name}
                   collapsible="header"
                   header={item.name}
                   extra={
@@ -256,7 +292,7 @@ const Detail = () => {
                 >
                   <ul style={{ textAlign: "left" }}>
                     {collection.map((child: any) => {
-                      return <li>{child.title.romaji}</li>;
+                      return <li key={child.id}>{child.title.romaji}</li>;
                     })}
                   </ul>
                 </Collapse.Panel>

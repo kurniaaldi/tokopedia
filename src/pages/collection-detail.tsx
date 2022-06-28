@@ -26,6 +26,7 @@ const Title = styled.p(
     alignItems: "center",
     justifyContent: "flex-end",
     padding: 10,
+    cursor: "pointer",
   },
   (props: any) => ({ ...props })
 );
@@ -41,6 +42,7 @@ const H1 = styled.h1({
   borderColor: "#007aff",
   padding: "15px 10px",
   borderRadius: "25%",
+  cursor: "pointer",
 });
 
 const CollectionDetail = () => {
@@ -133,6 +135,7 @@ const CollectionDetail = () => {
           {listAnime?.index > 0 && (
             <Title
               style={{
+                justifyContent: "flex-start",
                 borderBottom: "1px solid",
                 borderLeft: "1px solid",
                 borderTop: "1px solid",
@@ -234,7 +237,11 @@ const CollectionDetail = () => {
             name="collection"
             placeholder="collection"
             value={valueEditCollection}
-            onChange={(e) => setValueEditCollection(e.currentTarget.value)}
+            onChange={(e) =>
+              setValueEditCollection(
+                e.currentTarget.value.replace(/[^\w\s]/gi, "")
+              )
+            }
             titleButton="Edit"
             errorMsg={errorCollection}
           />

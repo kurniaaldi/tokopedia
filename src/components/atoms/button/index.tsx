@@ -31,7 +31,7 @@ interface IPropsButton {
 const Button = (props: IPropsButton) => {
   const { children, fullWidth = false, suffix, prefix, onClick } = props;
   return (
-    <StyledButton onClick={onClick} width={fullWidth && "100%"}>
+    <StyledButton onClick={onClick} width={fullWidth ? "100%" : "none"}>
       {prefix}
       {children}
       {suffix}

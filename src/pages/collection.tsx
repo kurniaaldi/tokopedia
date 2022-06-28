@@ -158,6 +158,7 @@ const Collections = () => {
                       width: "100%",
                       textAlign: "left",
                       marginRight: 15,
+                      cursor: "pointer",
                     }}
                   >
                     {item.name}
@@ -242,7 +243,9 @@ const Collections = () => {
             name="collection"
             placeholder="collection"
             value={valueCollection}
-            onChange={(e) => setValueCollection(e.currentTarget.value)}
+            onChange={(e) =>
+              setValueCollection(e.currentTarget.value.replace(/[^\w\s]/gi, ""))
+            }
             titleButton="Add"
             onClickButton={() => handleNewCollection()}
             errorMsg={errorCollection}
@@ -270,7 +273,11 @@ const Collections = () => {
             name="collection"
             placeholder="collection"
             value={valueEditCollection}
-            onChange={(e) => setValueEditCollection(e.currentTarget.value)}
+            onChange={(e) =>
+              setValueEditCollection(
+                e.currentTarget.value.replace(/[^\w\s]/gi, "")
+              )
+            }
             titleButton="Edit"
             errorMsg={errorCollection}
           />
