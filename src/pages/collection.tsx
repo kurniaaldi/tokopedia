@@ -2,7 +2,13 @@ import { CardList } from "components/molecules";
 import styled from "@emotion/styled";
 import { useCollection } from "store/collection";
 import { useNavigate } from "react-router-dom";
-import { Button, Dialog, Input, Modal } from "components/atoms";
+import {
+  Button,
+  Dialog,
+  EmptyCollection,
+  Input,
+  Modal,
+} from "components/atoms";
 import { useEffect, useState } from "react";
 import Collapse from "rc-collapse";
 
@@ -121,48 +127,31 @@ const Collections = () => {
           gap: "0.5rem",
         }}
       >
-        {Array.from(collections || []).map((item: any) => {
-          return (
-            <div
-              key={item.id}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                flexDirection: "column",
-                gap: "0.5rem",
-                marginTop: 10,
-              }}
-            >
+        {collections.length ? (
+          Array.from(collections || []).map((item: any) => {
+            return (
               <div
+                key={item.id}
                 style={{
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                  marginTop: 10,
                 }}
               >
-                <h3
-                  onClick={() => navigate(`/collection/${item.id}`)}
+                <div
                   style={{
-                    margin: 0,
-                    color: "#007aff",
                     width: "100%",
-                    textAlign: "left",
-                    marginRight: 15,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
                 >
-                  {item.name}
-                </h3>
-                <Icon
-                  onClick={() => {
-                    setItemCollection(item);
-                    setDialogEditCollection(true);
-                    setValueEditCollection(item.name);
-                  }}
-                >
-                  <h5
+                  <h3
+                    onClick={() => navigate(`/collection/${item.id}`)}
                     style={{
                       margin: 0,
                       color: "#007aff",
@@ -171,49 +160,74 @@ const Collections = () => {
                       marginRight: 15,
                     }}
                   >
-                    Edit
-                  </h5>
-                </Icon>
-                <Icon
-                  onClick={() => {
-                    setDialog({
-                      open: true,
-                      onCancel: () =>
-                        setDialog((prev: any) => ({ ...prev, open: false })),
-                      onOke: () => {
-                        removeCollection(item);
-                        handleDeleteCollection(item);
-                        setDialog((prev: any) => ({ ...prev, open: false }));
-                      },
-                    });
-                  }}
-                >
-                  <h5
-                    style={{
-                      margin: 0,
-                      color: "#cf3636",
-                      width: "100%",
-                      textAlign: "left",
-                      marginRight: 15,
+                    {item.name}
+                  </h3>
+                  <Icon
+                    onClick={() => {
+                      setItemCollection(item);
+                      setDialogEditCollection(true);
+                      setValueEditCollection(item.name);
                     }}
                   >
-                    Delete
-                  </h5>
-                </Icon>
+                    <h5
+                      style={{
+                        margin: 0,
+                        color: "#007aff",
+                        width: "100%",
+                        textAlign: "left",
+                        marginRight: 15,
+                      }}
+                    >
+                      Edit
+                    </h5>
+                  </Icon>
+                  <Icon
+                    onClick={() => {
+                      setDialog({
+                        open: true,
+                        onCancel: () =>
+                          setDialog((prev: any) => ({ ...prev, open: false })),
+                        onOke: () => {
+                          removeCollection(item);
+                          handleDeleteCollection(item);
+                          setDialog((prev: any) => ({ ...prev, open: false }));
+                        },
+                      });
+                    }}
+                  >
+                    <h5
+                      style={{
+                        margin: 0,
+                        color: "#cf3636",
+                        width: "100%",
+                        textAlign: "left",
+                        marginRight: 15,
+                      }}
+                    >
+                      Delete
+                    </h5>
+                  </Icon>
+                </div>
+                {item.collection.length ? (
+                  item.collection.map((child: any) => {
+                    return (
+                      <CardList
+                        key={child.id}
+                        item={child}
+                        onClick={() => navigate(`/anime/${child.id}`)}
+                        withIcon={false}
+                      />
+                    );
+                  })
+                ) : (
+                  <EmptyCollection title="No Anime Collection" />
+                )}
               </div>
-              {item.collection.map((child: any) => {
-                return (
-                  <CardList
-                    key={child.id}
-                    item={child}
-                    onClick={() => navigate(`/anime/${child.id}`)}
-                    withIcon={false}
-                  />
-                );
-              })}
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <EmptyCollection title="No Collection" />
+        )}
       </div>
 
       <Modal

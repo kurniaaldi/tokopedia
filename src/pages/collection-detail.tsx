@@ -1,7 +1,7 @@
 import { CardAnime } from "components/molecules";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { Button, Dialog, Input } from "components/atoms";
+import { Button, Dialog, EmptyCollection, Input } from "components/atoms";
 import { useCollection } from "store/collection";
 import { useNavigate, useParams } from "react-router-dom";
 import { EDIT, TRASH } from "assets";
@@ -16,17 +16,31 @@ const WrapperCard = styled.section({
   },
 });
 
-const Title = styled.p({
-  margin: 0,
-  color: "#007aff",
-});
+const Title = styled.p(
+  {
+    margin: 0,
+    color: "#007aff",
+    borderRadius: "25%",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: 10,
+  },
+  (props: any) => ({ ...props })
+);
 
-const H3 = styled.h3({
+const H1 = styled.h1({
   margin: 0,
   color: "#007aff",
   display: "flex",
   alignItems: "center",
   gap: "0.5rem",
+  borderBottom: "1px solid",
+  borderTop: "1px solid",
+  borderColor: "#007aff",
+  padding: "15px 10px",
+  borderRadius: "25%",
 });
 
 const CollectionDetail = () => {
@@ -94,6 +108,10 @@ const CollectionDetail = () => {
     }
   };
 
+  if (!collections.length) {
+    return <EmptyCollection title="You No have collection" />;
+  }
+
   return (
     <>
       <div
@@ -107,9 +125,20 @@ const CollectionDetail = () => {
           padding: "0.5rem 0",
         }}
       >
-        <div style={{ minWidth: "20%" }}>
+        <div
+          style={{
+            minWidth: "20%",
+          }}
+        >
           {listAnime?.index > 0 && (
             <Title
+              style={{
+                borderBottom: "1px solid",
+                borderLeft: "1px solid",
+                borderTop: "1px solid",
+                borderColor: "#007aff",
+                padding: 10,
+              }}
               onClick={() =>
                 navigate(
                   `/collection/${collections?.[listAnime.index - 1]?.id}`
@@ -122,7 +151,7 @@ const CollectionDetail = () => {
             </Title>
           )}
         </div>
-        <H3
+        <H1
           onClick={() => {
             setValueEditCollection(listAnime?.name);
 
@@ -130,10 +159,21 @@ const CollectionDetail = () => {
           }}
         >
           {listAnime?.name} <EDIT style={{ width: 15, height: 15 }} />
-        </H3>
-        <div style={{ minWidth: "20%" }}>
+        </H1>
+
+        <div
+          style={{
+            minWidth: "20%",
+          }}
+        >
           {collections.length > listAnime?.index + 1 && (
             <Title
+              style={{
+                borderBottom: "1px solid",
+                borderRight: "1px solid",
+                borderTop: "1px solid",
+                borderColor: "#007aff",
+              }}
               onClick={() =>
                 navigate(
                   `/collection/${collections?.[listAnime.index + 1]?.id}`
@@ -147,42 +187,46 @@ const CollectionDetail = () => {
         </div>
       </div>
 
-      <WrapperCard>
-        {Array.from(listAnime.collection || []).map((item: any) => {
-          return (
-            <CardAnime
-              customIcon={
-                <div
-                  style={{
-                    padding: 2,
-                    borderRadius: "50%",
-                    background: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <TRASH />
-                </div>
-              }
-              data={item}
-              clickIcon={() => {
-                setDialog({
-                  open: true,
-                  onCancel: () =>
-                    setDialog((prev: any) => ({ ...prev, open: false })),
-                  onOke: () => {
-                    removeAnime(item.id);
-                    setDialog((prev: any) => ({ ...prev, open: false }));
-                  },
-                });
-              }}
-              key={item?.id}
-              isAdded={true}
-            />
-          );
-        })}
-      </WrapperCard>
+      {listAnime?.collection?.length ? (
+        <WrapperCard>
+          {Array.from(listAnime.collection || []).map((item: any) => {
+            return (
+              <CardAnime
+                customIcon={
+                  <div
+                    style={{
+                      padding: 2,
+                      borderRadius: "50%",
+                      background: "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TRASH />
+                  </div>
+                }
+                data={item}
+                clickIcon={() => {
+                  setDialog({
+                    open: true,
+                    onCancel: () =>
+                      setDialog((prev: any) => ({ ...prev, open: false })),
+                    onOke: () => {
+                      removeAnime(item.id);
+                      setDialog((prev: any) => ({ ...prev, open: false }));
+                    },
+                  });
+                }}
+                key={item?.id}
+                isAdded={true}
+              />
+            );
+          })}
+        </WrapperCard>
+      ) : (
+        <EmptyCollection title="No Anime Collection" />
+      )}
 
       <Dialog
         title={
