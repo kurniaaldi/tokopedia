@@ -10,6 +10,8 @@ const Container = styled.div({
   margin: "0 auto",
   background: "#16161c",
   paddingTop: "5rem",
+  overflow: "hidden",
+  position: "relative",
 });
 
 const WrapperMain = styled.main({
@@ -59,6 +61,7 @@ const Layout = (props: any) => {
           position: "fixed",
           top: 0,
           width: "100%",
+          maxWidth: 1060,
           zIndex: 99,
           alignItems: "center",
           flexDirection: "row",
