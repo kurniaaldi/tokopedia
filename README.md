@@ -1,7 +1,5 @@
 # Open Project
-```
 https://tokopedia-one.vercel.app/
-```
 
 # Running unit test 
 
