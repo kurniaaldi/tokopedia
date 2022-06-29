@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+Array [
+  <div
+    className="overlay"
+    onClick={[Function]}
+  />,
+  <div
+    className="modal"
+    data-testid="dialog-id"
+  >
+    <div
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "justifyContent": "center",
+          "padding": "1rem",
+          "paddingBottom": "0",
+          "width": "100%",
+        }
+      }
+    >
+      header
+    </div>
+    <main
+      className="modal__main"
+    >
+      <p>
+        card
+      </p>
+    </main>
+  </div>,
+]
+`;

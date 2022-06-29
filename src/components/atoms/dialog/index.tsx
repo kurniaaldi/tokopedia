@@ -14,7 +14,7 @@ const Dialog = (props: ModalTypes) => {
       {open && (
         <>
           <div onClick={handleClose} className="overlay"></div>
-          <div className="modal">
+          <div data-testid="dialog-id" className="modal">
             <div
               style={{
                 width: "100%",

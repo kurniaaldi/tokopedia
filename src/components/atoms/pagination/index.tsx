@@ -12,7 +12,7 @@ const Pagination = (props: IPropsPagination) => {
   const { next, previous, hasNextPage, currentPage } = props;
 
   return (
-    <div className="pagination">
+    <div data-testid="pagination-id" className="pagination">
       {currentPage > 1 && (
         <li style={{ cursor: "pointer" }} onClick={() => previous(currentPage)}>
           &laquo;

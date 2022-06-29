@@ -14,7 +14,7 @@ interface IPropsCard {
 
 const Card = (props: IPropsCard) => {
   const { children } = props;
-  return <CardRoot>{children}</CardRoot>;
+  return <CardRoot data-testid="card-id">{children}</CardRoot>;
 };
 
 export default Card;

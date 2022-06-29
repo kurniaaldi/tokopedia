@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="pagination"
+  data-testid="pagination-id"
+>
+  <li
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+      }
+    }
+  >
+    «
+  </li>
+  <li
+    className="active"
+  >
+    2
+  </li>
+  <li
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+      }
+    }
+  >
+    »
+  </li>
+</div>
+`;
