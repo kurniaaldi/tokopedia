@@ -73,7 +73,7 @@ const Collections = () => {
       let newCollection = [
         ...collections,
         {
-          id: collections.length + 1,
+          id: new Date().getTime(),
           name: valueCollection,
           collection: [],
         },
@@ -177,6 +177,7 @@ const Collections = () => {
                         width: "100%",
                         textAlign: "left",
                         marginRight: 15,
+                        cursor: "pointer",
                       }}
                     >
                       Edit
@@ -184,6 +185,7 @@ const Collections = () => {
                   </Icon>
                   <Icon
                     onClick={() => {
+                      setValueEditCollection(item.name);
                       setDialog({
                         open: true,
                         onCancel: () =>
@@ -203,6 +205,7 @@ const Collections = () => {
                         width: "100%",
                         textAlign: "left",
                         marginRight: 15,
+                        cursor: "pointer",
                       }}
                     >
                       Delete
@@ -269,18 +272,23 @@ const Collections = () => {
 
       <Dialog
         title={
-          <Input
-            name="collection"
-            placeholder="collection"
-            value={valueEditCollection}
-            onChange={(e) =>
-              setValueEditCollection(
-                e.currentTarget.value.replace(/[^\w\s]/gi, "")
-              )
-            }
-            titleButton="Edit"
-            errorMsg={errorCollection}
-          />
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+          >
+            <h4>{`Are You Sure, want change collection "${valueEditCollection}" permanent?`}</h4>
+            <Input
+              name="collection"
+              placeholder="collection"
+              value={valueEditCollection}
+              onChange={(e) =>
+                setValueEditCollection(
+                  e.currentTarget.value.replace(/[^\w\s]/gi, "")
+                )
+              }
+              titleButton="Edit"
+              errorMsg={errorCollection}
+            />
+          </div>
         }
         open={dialogEditCollection}
         handleClose={() => setDialogEditCollection(false)}
@@ -305,7 +313,9 @@ const Collections = () => {
       </Dialog>
 
       <Dialog
-        title={<h4>Are You Sure, want delete collection permanent?</h4>}
+        title={
+          <h4>{`Are You Sure, want delete collection "${valueEditCollection}" permanent?`}</h4>
+        }
         open={dialog.open}
         handleClose={() => dialog.onCancel()}
       >

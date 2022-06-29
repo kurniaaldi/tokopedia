@@ -152,7 +152,7 @@ const Home = () => {
       setListCollection((prev: any) => [
         ...prev,
         {
-          id: prev.length + 1,
+          id: new Date().getTime(),
           name: valueCollection,
           collection: [],
         },
@@ -246,6 +246,7 @@ const Home = () => {
                   header={item.name}
                   extra={
                     <p
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
                         setOpenSlide({
                           open: true,

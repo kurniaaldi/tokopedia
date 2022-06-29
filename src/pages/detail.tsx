@@ -101,7 +101,7 @@ const Detail = () => {
       let newCollection = [
         ...collections,
         {
-          id: collections.length + 1,
+          id: new Date().getTime(),
           name: valueCollection,
           collection: [],
         },
@@ -281,6 +281,7 @@ const Detail = () => {
                   header={item.name}
                   extra={
                     <p
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
                         addAnime({ name: item.name, item: simpleDataAnime });
                         setOpenModal(false);

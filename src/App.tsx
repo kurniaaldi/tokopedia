@@ -20,15 +20,9 @@ const App = () => {
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
-            </Routes>
-            <Routes>
-              <Route path="/anime/:id" element={<Detail />} />
-            </Routes>
-            <Routes>
-              <Route path="/collections" element={<Collections />} />
-            </Routes>
-            <Routes>
-              <Route path="/collection/:id" element={<CollectionDetail />} />
+              <Route path="anime/:id" element={<Detail />} />
+              <Route path="collections/" element={<Collections />} />
+              <Route path="collection/:id" element={<CollectionDetail />} />
             </Routes>
           </Layout>
         </Router>

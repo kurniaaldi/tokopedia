@@ -56,6 +56,7 @@ const CollectionDetail = () => {
 
   const [dialogEditCollection, setDialogEditCollection] = useState(false);
   const [valueEditCollection, setValueEditCollection] = useState<string>();
+  const [nameAnime, setNameAnime] = useState<string>();
 
   const [listAnime, setListAnime] = useState<any>({});
 
@@ -211,6 +212,7 @@ const CollectionDetail = () => {
                 }
                 data={item}
                 clickIcon={() => {
+                  setNameAnime(item?.title?.english || item?.title?.romaji);
                   setDialog({
                     open: true,
                     onCancel: () =>
@@ -233,18 +235,24 @@ const CollectionDetail = () => {
 
       <Dialog
         title={
-          <Input
-            name="collection"
-            placeholder="collection"
-            value={valueEditCollection}
-            onChange={(e) =>
-              setValueEditCollection(
-                e.currentTarget.value.replace(/[^\w\s]/gi, "")
-              )
-            }
-            titleButton="Edit"
-            errorMsg={errorCollection}
-          />
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+          >
+            <h4>{`Are You Sure, want change collection "${valueEditCollection}" permanent?`}</h4>
+
+            <Input
+              name="collection"
+              placeholder="collection"
+              value={valueEditCollection}
+              onChange={(e) =>
+                setValueEditCollection(
+                  e.currentTarget.value.replace(/[^\w\s]/gi, "")
+                )
+              }
+              titleButton="Edit"
+              errorMsg={errorCollection}
+            />
+          </div>
         }
         open={dialogEditCollection}
         handleClose={() => setDialogEditCollection(false)}
@@ -263,7 +271,9 @@ const CollectionDetail = () => {
       </Dialog>
 
       <Dialog
-        title={<h4>Are You Sure, want delete ANIME from collection?</h4>}
+        title={
+          <h4>{`Are You Sure, want delete ANIME "${nameAnime}" from collection?`}</h4>
+        }
         open={dialog.open}
         handleClose={() => dialog.onCancel()}
       >
