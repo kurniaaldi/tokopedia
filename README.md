@@ -1,46 +1,111 @@
-# Getting Started with Create React App
+# Open Project
+```
+https://tokopedia-one.vercel.app/
+```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Running unit test 
 
-## Available Scripts
+*unit tests are created to validate the output of function utils*
 
-In the project directory, you can run:
+npm
+```
+npm run test
+```
 
-### `npm start`
+yarn
+```
+yarn test
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Running project for android
+```
+npm run start
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+1. Anime List page
+    * - [x] Anime list : As a user, I can see 10 anime on initial page load.
+       * - [x]  For each anime, show info at least the anime title and anime cover/banner.
+       * - [x] Each anime item are clickable, and will redirect to Anime Detail page when clicked.
+       * - [x] Anime List page should have pagination functionality.
+   
+    * - [x] Bulk add to the collection : Bulk add to the collection.
+       * - [x] User can select multiple anime item/card to be added into a collection via Modal/PopUp form.
+       * - [x] If user want to bulk add anime to collection but there is no collection yet, user can set collection name as new collection.
+       * - [x] Collection Name must unique.
+       * - [x] Collection Name doesn’t have special Char.
+ 
+2. Anime Detail page.
+    * - [x] Anime detail info : As a user, I can anime info on the page.
+       * - [x] Show anime cover/banner.
+       * - [x] Show anime title.
+       * - [x] Show other anime details (description, number of episodes, genres, rating, etc). Feel free to add more.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    * - [x] Add to the collection : As a user, I can the anime to the collection.
+       * - [x] Show all collections at once on initial load page.
+       * - [x] Each collection item should show collection name.
+       * - [x] Each collection item should show anime cover/banner from the firstly added anime. If no anime added yet, use default image as cover/banner. 
+       * - [x] User can click the collection item, and will redirect to Collection Detail page.
+       * - [x] The collections in this list should be persist even after a full page reload.
+    
+    * - [x] Collection info : As a user, I can see if the anime already added to collection or not.
+       * - [x] User can see list of collection names where the anime already added.
+       * - [x] User can click the collection name, and will redirect to Collection Detail page
 
-### `npm run build`
+3. Collection List page.
+     * - [x] Collection list info : As a user, I can see list of collection that already added
+       * - [x] Show all collections at once on initial load page
+       * - [x] Each collection item should show collection name
+       * - [x] Each collection item should show anime cover/banner from the firstly added anime. If no anime added yet, use default image as cover/banner.
+       * - [x] User can click the collection item, and will redirect to Collection Detail page.
+       * - [x] The collections in this list should be persist even after a full page reload.     
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    * - [x] Remove Collection : As a user, I can remove collection from Collection List page.
+       * - [x] Show “Remove” button on each collection item/card.
+       * - [x] Add confirmation modal/popup when user click Remove button, with collection name info.
+       * - [x] After remove finished, collection list should be updated without reloading the page.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    * - [x] Add Collection : As a user, I can add collection from Collection List page.
+       * - [x] Show “Add a Collection” button on top of Collection List page.
+       * - [x] When button clicked, show modal/popup to fill collection name (collection name should be unique) and submit as new collection.
+       * - [x] After submit finished, new collection should automatically added to the list without reloading Collection List page.
+       * - [x] Collection Name must unique.
+       * - [x] Collection Name doesn’t have special Char
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    * - [x] Edit Collection : As a user, I can edit collection name from Collection List page.
+       * - [x] Show “Edit” button on each collection item/card.
+       * - [x] Add modal/popup when user click Edit button, with collection name input field, and submit button.
+       * - [x] After edit finished, collection list should be updated without reloading the page.
+       * - [x] Collection Name doesn’t have special Char
+       * - [x] Collection Name must unique
 
-### `npm run eject`
+4. Collection Detail page.
+    * - [x] Collection detail info : As a user, I can see list of anime that already added to the collection.
+       * - [x] Show collection name on top of the Collection Detail page.
+       * - [x] Show all added anime at once on initial load page.
+       * - [x] Each anime item/card should show anime name & anime cover/banner
+       * - [x] User can click the anime item, and will redirect to Anime Detail page.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    * - [x] Remove anime from collection : As a user, I can remove anime from Collection Detail page.
+       * - [x] Show “Remove” button on each anime item/card.
+       * - [x] Add confirmation modal/popup when user click Remove button, with anime title info
+       * - [x] After remove finished, anime list should be updated without reloading the page.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    * - [x] Edit Collection Name : As a user, I can edit collection name from Collection Detail page.
+       * - [x] Show “Edit” button on top of Collection Detail page
+       * - [x] Add modal/popup when user click Edit button, with collection name input field, and submit button.
+       * - [x] After edit finished, collection detail page should be updated without reloading the page.
+       * - [x] Collection Name must unique
+       * - [x] Collection Name doesn’t have special Char.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+      
