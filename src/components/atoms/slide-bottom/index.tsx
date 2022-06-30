@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 const SlideUpBottom = styled.div(
   {
-    position: "sticky",
+    position: "fixed",
     width: "100%",
     bottom: 0,
     maxHeight: "20rem",
@@ -13,6 +13,7 @@ const SlideUpBottom = styled.div(
     overflow: "auto",
     transform: "none",
     transition: "transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms",
+    maxWidth: 1060,
   },
   (props) => ({ ...props.style })
 );
