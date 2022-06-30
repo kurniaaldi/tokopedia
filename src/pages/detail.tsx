@@ -130,7 +130,7 @@ const Detail = () => {
     <div>
       <WrapperBox>
         <img
-          src={data?.Media?.coverImage.large}
+          src={data?.Media?.coverImage?.large}
           alt={data?.Media?.title.english}
           style={{
             width: "10rem",
@@ -167,7 +167,9 @@ const Detail = () => {
             zIndex: 2,
           }}
         >
-          <H4>{data?.Media?.title.english || data?.Media?.title.romaji}</H4>
+          <H4>
+            {data?.Media?.title?.english || data?.Media?.title?.romaji || " - "}
+          </H4>
           <H4
             style={{
               margin: 0,
@@ -178,7 +180,7 @@ const Detail = () => {
               gap: 5,
             }}
           >
-            <STAR color="#FFC833" /> 82
+            <STAR color="#FFC833" /> {data?.averageScore || " - "}
           </H4>
           <div
             style={{
@@ -212,35 +214,35 @@ const Detail = () => {
       <WrapperBox>
         <BoxSpesifikasi>
           <Title>Alternatif Judul:</Title>
-          <Subtitle>{data?.Media?.title.english}</Subtitle>
-          <Subtitle>{data?.Media?.title.native}</Subtitle>
+          <Subtitle>{data?.Media?.title?.english || " - "}</Subtitle>
+          <Subtitle>{data?.Media?.title?.native || " - "}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Status:</Title>
-          <Subtitle>{data?.Media?.status}</Subtitle>
+          <Subtitle>{data?.Media?.status || " - "}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Episode:</Title>
-          <Subtitle color="#007aff">{data?.Media?.episodes}</Subtitle>
+          <Subtitle color="#007aff">{data?.Media?.episodes || " - "}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Jenis:</Title>
-          <Subtitle color="#007aff">{data?.Media?.format}</Subtitle>
+          <Subtitle color="#007aff">{data?.Media?.format || " - "}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Season:</Title>
-          <Subtitle color="#007aff">{data?.Media?.season}</Subtitle>
+          <Subtitle color="#007aff">{data?.Media?.season || " - "}</Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>studios:</Title>
           <Subtitle color="#007aff">
-            {data?.Media?.studios.nodes?.[0].name}
+            {data?.Media?.studios?.nodes?.[0]?.name || " - "}
           </Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Genres:</Title>
           <Subtitle color="#007aff">
-            {Array.from(data?.Media?.genres || []).join()}
+            {Array.from(data?.Media?.genres || []).join() || " - "}
           </Subtitle>
         </BoxSpesifikasi>
         <BoxSpesifikasi>
@@ -248,7 +250,9 @@ const Detail = () => {
           {/* <Subtitle textAlign="left">{data?.Media?.description}</Subtitle> */}
           <div
             style={{ color: "#ccc", textAlign: "left" }}
-            dangerouslySetInnerHTML={{ __html: data?.Media?.description }}
+            dangerouslySetInnerHTML={{
+              __html: data?.Media?.description || " - ",
+            }}
           />
         </BoxSpesifikasi>
       </WrapperBox>
