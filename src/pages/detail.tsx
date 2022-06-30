@@ -214,8 +214,12 @@ const Detail = () => {
       <WrapperBox>
         <BoxSpesifikasi>
           <Title>Alternatif Judul:</Title>
-          <Subtitle>{data?.Media?.title?.english || " - "}</Subtitle>
-          <Subtitle>{data?.Media?.title?.native || " - "}</Subtitle>
+          {data?.Media?.title?.english && (
+            <Subtitle>{data?.Media?.title?.english || " - "}</Subtitle>
+          )}
+          {data?.Media?.title?.native && (
+            <Subtitle>{data?.Media?.title?.native || " - "}</Subtitle>
+          )}
         </BoxSpesifikasi>
         <BoxSpesifikasi>
           <Title>Status:</Title>
